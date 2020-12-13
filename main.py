@@ -52,6 +52,8 @@ def play_round(stdscr, num_round, questions):
             , curses.color_pair(3))
     stdscr.addstr(4, 0, '---------------------------'
             , curses.color_pair(3))
+    stdscr.clrtoeol()
+    stdscr.refresh()
     stdscr.refresh()
     read_questions = []
     hits = 0
@@ -96,9 +98,17 @@ def play_round(stdscr, num_round, questions):
             hits+=1
 
     stdscr.clear()
-    stdscr.addstr(6, 0, 'You guessed '+str(hits)+' out of 5.'
-                , curses.color_pair(3))
-    stdscr.addstr(7, 0, 'Hit any key for next round')
+    stdscr.addstr(4, 0, 'You guessed '+str(hits)+' out of 5.'
+        , curses.color_pair(3))
+    if hits == 2:
+        stdscr.addstr(4, 0, 'Get a new color if you own 2 or less.'
+            , curses.color_pair(3))
+    elif 2 < hits < 5:
+        stdscr.addstr(4, 0, 'Get a new color if you own 4 or less.'
+            , curses.color_pair(3))
+    elif hits == 5:
+        stdscr.addstr(4, 0, 'Get a new color! You ROCK!!!'
+            , curses.color_pair(3))
     c = stdscr.getch()
 
 
