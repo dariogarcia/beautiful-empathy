@@ -43,7 +43,7 @@ def choose_color(stdscr):
             , curses.color_pair(1))
     c = stdscr.getch()
 
-def play_round(stdscr, num_round, questions):
+def play_round(stdscr, num_round, questions, read_questions):
     stdscr.addstr(0, 0, '---------------------------'
             , curses.color_pair(3))
     stdscr.addstr(1, 0, '---- Round number '+str(num_round+1)+'/5 -------'
@@ -55,7 +55,6 @@ def play_round(stdscr, num_round, questions):
     stdscr.clrtoeol()
     stdscr.refresh()
     stdscr.refresh()
-    read_questions = []
     hits = 0
     for num_question in range(5):
         stdscr.addstr(3, 0, '---- Question number '+str(num_question+1)+'/5 ----'
@@ -110,7 +109,71 @@ def play_round(stdscr, num_round, questions):
         stdscr.addstr(4, 0, 'Get a new color! You ROCK!!!'
             , curses.color_pair(3))
     c = stdscr.getch()
+    return hits, read_questions
 
+def get_card(stdscr, hits):
+    #Deck 1
+    if hits < 2:
+        dice = random.randint(0,9)
+        if dice < 7:
+            stdscr.addstr(6, 0, 'Your card is: 4c')
+            stdscr.clrtoeol()
+            stdscr.refresh()
+            c = stdscr.getch()
+        elif dice < 9:
+            stdscr.addstr(6, 0, 'Your card is: 4c + 1C')
+            stdscr.clrtoeol()
+            stdscr.refresh()
+            c = stdscr.getch()
+        else:
+            stdscr.addstr(6, 0, 'Your card is: 8c')
+            stdscr.clrtoeol()
+            stdscr.refresh()
+            c = stdscr.getch()
+    #Deck 2
+    else:
+        dice = random.randint(0,9)
+        if dice < 2:
+            stdscr.addstr(6, 0, 'Your card is: 8c')
+            stdscr.clrtoeol()
+            stdscr.refresh()
+            c = stdscr.getch()
+
+        elif dice < 6:
+            stdscr.addstr(6, 0, 'Your card is: 4c + 2C')
+            stdscr.clrtoeol()
+            stdscr.refresh()
+            c = stdscr.getch()
+
+        elif dice < 9:
+            stdscr.addstr(6, 0, 'Your card is: 8c + 2C')
+            stdscr.clrtoeol()
+            stdscr.refresh()
+            c = stdscr.getch()
+
+        else:
+            stdscr.addstr(6, 0, 'Your card is: 16c')
+            stdscr.clrtoeol()
+            stdscr.refresh()
+            c = stdscr.getch()
+
+        if hits == 5:
+            dice = random.randint(1,3)
+            if dice == 1:
+                stdscr.addstr(8, 0, 'Bonus: Gift any color to your companion.')
+                stdscr.clrtoeol()
+                stdscr.refresh()
+                c = stdscr.getch()
+            elif dice == 2:
+                stdscr.addstr(8, 0, 'Bonus: Place 8c of any color.')
+                stdscr.clrtoeol()
+                stdscr.refresh()
+                c = stdscr.getch()
+            else :
+                stdscr.addstr(8, 0, 'Bonus: Change 4 tiles on the board with any color')
+                stdscr.clrtoeol()
+                stdscr.refresh()
+                c = stdscr.getch()
 
 def main(self):
     curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
@@ -140,8 +203,10 @@ def main(self):
     stdscr.clear()
 
     #Start playing rounds
+    done_questions = []
     for round_num in range(15):
-        play_round(stdscr,round_num,questions)
+        hits,done_questions = play_round(stdscr, round_num, questions, done_questions)
+        get_card(stdscr, hits)
 
     #End program
     curses.nocbreak()
