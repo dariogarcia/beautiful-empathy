@@ -1,22 +1,22 @@
-import csv
 import curses
 from curses import wrapper
 import random
 
 def read_questions(qs):
-    with open('Questions - Sheet1.tsv') as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter='\t')
-        line_count = 0
-        for row in csv_reader:
-            qs[row[0].replace("mask","   ")] = (row[1],row[2])
-            print(qs)
+    with open('./data/questions_v0.tsv') as file:
+        lines = file.readlines()
+        lines = [line.split('\t')[0] for line in lines]
+        qs[lines[0]]=(lines[1],lines[2])
 
 def game_init(stdscr):
     stdscr.addstr(0, 0, 'Welcome to Beautiful Empathy.\n'\
-            '       Press a key to begin a new mural.'
+            '       A game by Dario'
+            '       Press \'q\' at any time to exit.'
+            '       Press any key to begin a new mural.'
             , curses.color_pair(1))
     stdscr.refresh()
     c = stdscr.getch()
+    return c
 
 def choose_color(stdscr):
     #1
@@ -42,6 +42,7 @@ def choose_color(stdscr):
     stdscr.addstr(2, 0, 'Player 2, your initial color is '+str(rand_col_2)
             , curses.color_pair(1))
     c = stdscr.getch()
+    return c
 
 def play_round(stdscr, num_round, questions, read_questions):
     stdscr.addstr(0, 0, '---------------------------'
@@ -175,6 +176,11 @@ def get_card(stdscr, hits):
                 stdscr.refresh()
                 c = stdscr.getch()
 
+def check_quit(c):
+    if c == ord('q'):
+        return True
+    return False
+
 def main(self):
     curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
     curses.init_pair(2, curses.COLOR_RED, curses.COLOR_YELLOW)
@@ -193,13 +199,16 @@ def main(self):
     #Read questions file
     read_questions(questions)
     num_questions = len(questions)
-
     #Game init
-    game_init(stdscr)
+    c = game_init(stdscr)
+    if check_quit(c):
+        return
     stdscr.clear()
 
     #Choose first color
-    choose_color(stdscr)
+    c = choose_color(stdscr)
+    if check_quit(c):
+        return
     stdscr.clear()
 
     #Start playing rounds
