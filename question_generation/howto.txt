@@ -1,0 +1,2 @@
+To generate candidates, input a file with one sentence per line, each line contains [MASK] to produce options on.
+python3 main.py | more
