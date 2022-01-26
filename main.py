@@ -18,31 +18,61 @@ def game_init(stdscr):
     c = stdscr.getch()
     return c
 
-def choose_color(stdscr):
-    #1
-    stdscr.addstr(0, 0, 'Player 1: Press key to select starting random color.'
-            , curses.color_pair(1))
-    stdscr.refresh()
-    c = stdscr.getch()
-    #2
-    rand_col_1 = random.randint(1,20)
-    stdscr.clear()
-    stdscr.addstr(0, 0, 'Player 1, your initial color is '+str(rand_col_1)
-        , curses.color_pair(1))
-    stdscr.addstr(2, 0, 'Player 2: Press key to select starting random color.'
-            , curses.color_pair(1))
-    c = stdscr.getch()
-    #3
-    rand_col_2 = random.randint(1,20)
-    while rand_col_2 == rand_col_1 :
-        rand_col_2 = random.randint(1,20)
-    stdscr.clear()
-    stdscr.addstr(0, 0, 'Player 1, your initial color is '+str(rand_col_1)
-        , curses.color_pair(1))
-    stdscr.addstr(2, 0, 'Player 2, your initial color is '+str(rand_col_2)
-            , curses.color_pair(1))
+def choose_color(stdscr,num_players):
+#Asigns num_players random values between 1 and 20
+#Does not repeat values
+#num_players max is between 1 and 20. Forced to it.
+    if num_players<1:
+        num_players==1
+    if num_players>20:
+        num_players==20
+    chosen_colors = []
+    #Assigning unique random initial numbers
+    for num_play in range(1,num_players+1):
+        stdscr.addstr((num_play*2)-2, 0, 'Player '+str(num_play)+': Press any'\
+            ' key to select starting random color.', curses.color_pair(1))
+    	stdscr.refresh()
+    	c = stdscr.getch()
+        if check_quit(c):
+            return c
+    	rand_col = random.randint(1,20)
+        while rand_col in chosen_colors:
+    	   rand_col = random.randint(1,20)
+        chosen_colors.append(rand_col)
+        stdscr.addstr((num_play*2)-1, 0, 'Player '+str(num_play)+', your '\
+            'initial color is '+str(rand_col)+'. Press any key to continue'\
+             , curses.color_pair(1))
+    	stdscr.refresh()
+    	c = stdscr.getch()
+        if check_quit(c):
+            return c
+    #Goodbye
+    stdscr.addstr((num_players*2)+1, 0, 'Initial color selection '\
+        'complete' , curses.color_pair(2))
+    stdscr.addstr((num_players*2)+2, 0, 'Locate yourself in the color '\
+        'map, and get ready for the first round of empathy questions',\
+        curses.color_pair(3))
+    stdscr.addstr((num_players*2)+3, 0, 'Press any key to continue',\
+        curses.color_pair(2))
     c = stdscr.getch()
     return c
+
+def get_num_players(stdscr):
+    stdscr.addstr(0, 0, 'How many players will be joining the game? [1-20]',\
+        curses.color_pair(1))
+    stdscr.refresh()
+    c = stdscr.getstr()
+    while True:
+    	if c.isdigit():
+    	    if int(c) in range(1,20):
+    	        return int(c)
+    	stdscr.addstr(0, 0, 'Invalid value. Number of players must be between'\
+    	    +' and 20', curses.color_pair(2))
+    	stdscr.addstr(1, 0, 'How many players will be joining the game? [1-20]',\
+    	    curses.color_pair(1))
+    	stdscr.refresh()
+    	c = stdscr.getstr()
+    return 1
 
 def play_round(stdscr, num_round, questions, read_questions):
     stdscr.addstr(0, 0, '---------------------------'
@@ -205,8 +235,12 @@ def main(self):
         return
     stdscr.clear()
 
+    #Num players
+    n = get_num_players(stdscr)
+    stdscr.clear()
+
     #Choose first color
-    c = choose_color(stdscr)
+    c = choose_color(stdscr,n)
     if check_quit(c):
         return
     stdscr.clear()
