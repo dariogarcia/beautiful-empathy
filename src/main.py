@@ -3,13 +3,7 @@ global curses
 from curses import wrapper
 import random
 from config import welcome_screen, init_color_pairs
-
-def read_questions(qs):
-    with open('./../data/questions_v0.tsv') as file:
-        lines = file.readlines()
-        lines = [line.split('\t')[0] for line in lines]
-        print(lines)
-        qs[lines[0]]=(lines[1],lines[2])
+from Questions import Questions
 
 def choose_color(scr,num_players):
 #Asigns num_players random values between 1 and 20
@@ -95,33 +89,29 @@ def play_round(scr, num_round, questions, read_questions):
         scr.clrtoeol()
         scr.refresh()
         c = scr.getch()
-        if len(read_questions) == len(questions):
-            scr.addstr(6, 0, 'You run out of questions. Game will end now :('
-                , curses.color_pair(2))
+        
+        #scr.addstr(6, 0, questions[0])
+        #scr.clrtoeol()
+        #scr.refresh()
+        #c = scr.getch()
+        
+        for quest in questions.list_of_q:
+            scr.addstr(8, 0, quest.q
+                    , curses.color_pair(1))
+            scr.addstr(6, 0, 'Press any key for the two options')
+            scr.clrtoeol()
+            scr.refresh()
             c = scr.getch()
-            return
-        found = False
-        while not found: 
-            question = random.choice(list(questions.keys()))
-            if questions not in read_questions:
-                found = True
-        read_questions.append(question)
-        scr.addstr(8, 0, question
-                , curses.color_pair(1))
-        scr.addstr(6, 0, 'Press any key for the two options')
-        scr.clrtoeol()
-        scr.refresh()
-        c = scr.getch()
-        scr.addstr(10, 10, questions[question][0]+' / '+questions[question][1]
-                , curses.color_pair(1))
-        scr.clrtoeol()
-        scr.refresh()
-        scr.addstr(6, 0, 'Press "H" if it was correctly guessed. Any other key otherwise')
-        scr.clrtoeol()
-        scr.refresh()
-        c = scr.getch()
-        if c == ord('H'):
-            hits+=1
+            scr.addstr(10, 10, quest.v1+' / '+quest.v2
+                    , curses.color_pair(1))
+            scr.clrtoeol()
+            scr.refresh()
+            scr.addstr(6, 0, 'Press "H" if it was correctly guessed. Any other key otherwise')
+            scr.clrtoeol()
+            scr.refresh()
+            c = scr.getch()
+            if c == ord('H'):
+                hits+=1
 
     scr.clear()
     scr.addstr(4, 0, 'You guessed '+str(hits)+' out of 5.'
@@ -208,6 +198,7 @@ def check_quit(c):
     return False
 
 def main(self):
+    q = Questions()
     global curses
     scr = curses.initscr()
     # Clear screen with border
@@ -221,10 +212,12 @@ def main(self):
     
     #Initialize colors & questions 
     init_color_pairs()
-    #TODO: create question class
-    questions = {}
-    read_questions(questions)
-    num_questions = len(questions)
+    #read_questions(questions)
+    q = Questions()
+    num_questions = len(q)
+    done_questions = []
+
+    #TODO: Continue here!!!
 
     #Welcome Screen
     c = welcome_screen(scr)
@@ -240,9 +233,8 @@ def main(self):
     scr.clear()
 
     #Start playing rounds
-    done_questions = []
     for round_num in range(15):
-        hits,done_questions = play_round(scr, round_num, questions, done_questions)
+        hits,done_questions = play_round(scr, round_num, q, done_questions)
         get_card(scr, hits)
 
     #End program
