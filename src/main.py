@@ -2,8 +2,9 @@ import curses
 global curses
 from curses import wrapper
 import random
-from config import welcome_screen, init_color_pairs
+from config import welcome_screen, init_color_pairs, get_num_players
 from Questions import Questions
+from Game import Player, Game
 
 def choose_color(scr,num_players):
 #Asigns num_players random values between 1 and 20
@@ -46,23 +47,6 @@ def choose_color(scr,num_players):
     c = scr.getch()
     return c
 
-def get_num_players(scr):
-    scr.addstr(0, 0, 'How many players will be joining the game?',\
-        curses.color_pair(1))
-    scr.addstr(1, 0, 'Enter a number and press any key.', curses.color_pair(1))
-    scr.refresh()
-    c = scr.getstr()
-    while True:
-    	if c.isdigit():
-    	    if int(c) in range(1,20):
-    	        return int(c)
-    	scr.addstr(0, 0, 'Invalid value. Number of players must be between'\
-    	    +' and 20', curses.color_pair(2))
-    	scr.addstr(2, 0, 'How many players will be joining the game? [1-20]',\
-    	    curses.color_pair(1))
-    	scr.refresh()
-    	c = scr.getstr()
-    return 1
 
 def play_round(scr, num_round, questions, read_questions):
     scr.addstr(0, 0, '---------------------------'
@@ -201,7 +185,7 @@ def main(self):
     q = Questions()
     global curses
     scr = curses.initscr()
-    # Clear screen with border
+    # Clear screen, add border
     scr.clear()
     scr.border(curses.ACS_VLINE, curses.ACS_VLINE,
               curses.ACS_DIAMOND, curses.ACS_DIAMOND)
@@ -210,27 +194,26 @@ def main(self):
     #curses.cbreak()
     #scr.keypad(True)
     
-    #Initialize colors & questions 
+    #Initialize colors & read questions 
     init_color_pairs()
-    #read_questions(questions)
-    q = Questions()
-    num_questions = len(q)
-    done_questions = []
-
-    #TODO: Continue here!!!
+    qs = Questions()
 
     #Welcome Screen
     c = welcome_screen(scr)
-    #player Selection
-    #TODO: create player class
+    #Player Definition
     n = get_num_players(scr)
-    scr.clear()
-
-    #Choose first color
-    c = choose_color(scr,n)
+    names = get_names_players(scr)
+    #First color
+    c = get_first_color(scr,n)
     if check_quit(c):
         return
     scr.clear()
+
+    names = ['A']
+    init_colors = [1]
+
+    #Create Game
+    gg = Game(names, init_colors, qs)
 
     #Start playing rounds
     for round_num in range(15):
