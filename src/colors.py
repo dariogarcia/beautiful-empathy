@@ -1,4 +1,4 @@
-COLORS = {
+COLORS = dict([
 (1, "#fcffbfff"),  
 (2, "#ffdd22ff"),
 (3, "#f9aa13ff"), 
@@ -19,7 +19,7 @@ COLORS = {
 (18, "#0c5c92ff"),
 (19, "#341081ff"),
 (20, "#513a2cff")
-}
+])
 
 EDGE_LIST = [
     (1,2),
