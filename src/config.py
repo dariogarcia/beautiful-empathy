@@ -1,5 +1,6 @@
 from colors import COLORS
 import random
+from Image_edit import show_color, show_color_map
 
 def init_color_pairs():
     global curses
@@ -61,34 +62,37 @@ def get_names_players(scr,nplayers):
         raise Exception('Wrong number of player names recorded')
     return names
 
+
 def choose_color(scr,names):
     colors = []
     scr.addstr(1, 2, 'Each player gets an randomly assigned,'\
         ' unique initial color')
     for n in names:
-        scr.addstr(3, 2, n+ ' press any key for a random color.'\
-            , curses.color_pair(2)| curses.A_BLINK)
+        scr.addstr(3, 2, n+ ' press any key for a random color.             '\
+            '                  ', curses.color_pair(2)| curses.A_BLINK)
         scr.refresh()
         c = scr.getch()
         color_id, color_hex = random.choice(list(COLORS.items()))
         while color_id in colors:
             color_id, color_hex = random.choice(list(COLORS.items()))
         colors.append(color_id)
-        show_color(color_hex)
-        scr.addstr((num_play*2), 0, n+', this is your initial color :) Press'\
+        img = show_color(color_hex)
+        scr.addstr(3, 2, n+', this is your initial color :) Press'\
             ' any key to continue', curses.color_pair(1))
         scr.refresh()
         c = scr.getch()
-        if check_quit(c):
-            return c
-    #Goodbye
-    scr.addstr((num_players*2)+1, 0, 'Initial color selection '\
-        'complete' , curses.color_pair(2))
-    scr.addstr((num_players*2)+2, 0, 'Locate yourself in the color '\
-        'map, and get ready for the first round of empathy questions',\
-        curses.color_pair(3))
-    scr.addstr((num_players*2)+3, 0, 'Press any key to continue',\
+        img.close()
+    return colors
+
+def config_summary():
+    scr.addstr(1, 2, 'Initial color selection ' , curses.color_pair(2))
+    scr.addstr(2, 2, 'Locate yourself in the color map, and get ready for the'\
+        ' first round of empathy questions', curses.color_pair(3))
+    scr.addstr(3, 0, 'Press any key to continue',\
         curses.color_pair(2))
+    scr.refresh()
+    img = show_color_map()
     c = scr.getch()
+    img.close()
     return c
 

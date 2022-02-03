@@ -163,9 +163,14 @@ def main(self):
     #First color
     init_colors = choose_color(scr,names)
 
-
     #Create Game
     gg = Game(names, init_colors, qs)
+
+    #Show color map
+    show_color_map(gg)
+
+    #Show board
+    show_board(gg)
 
     #Start playing rounds
     for round_num in range(15):
