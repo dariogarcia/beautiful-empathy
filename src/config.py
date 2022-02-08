@@ -1,8 +1,8 @@
-from colors import COLORS
+from colors import Color_map
 import random
-from Image_edit import show_color, show_color_map
+from image_edit import show_color, show_color_map
 
-def init_color_pairs():
+def init_font_color_pairs():
     global curses
     import curses
     curses.init_pair(1, curses.COLOR_BLUE, curses.COLOR_YELLOW)
@@ -46,7 +46,7 @@ def get_names_players(scr,nplayers):
             scr.clear()
             scr.addstr(1, 2, 'Choose 3 characters that will represent their artist during the game')
             scr.addstr(3, 2, 'Player number '+str(i)+' please enter your 3'\
-                +' characters and press Enter', curses.color_pair(2)| curses.A_BLINK)
+                +' characters and press Enter', curses.color_pair(2))
             scr.refresh()
             c = scr.getstr().decode(encoding="utf-8")
             if len(c) != 3:
@@ -63,7 +63,7 @@ def get_names_players(scr,nplayers):
     return names
 
 
-def choose_color(scr,names):
+def choose_color(scr,names, color_map):
     colors = []
     scr.addstr(1, 2, 'Each player gets an randomly assigned,'\
         ' unique initial color')
@@ -72,27 +72,17 @@ def choose_color(scr,names):
             '                  ', curses.color_pair(2)| curses.A_BLINK)
         scr.refresh()
         c = scr.getch()
-        color_id, color_hex = random.choice(list(COLORS.items()))
+        color_id, color_hex = random.choice(color_map.colors)
+        #color_id, color_hex = random.choice(list(COLORS.items()))
         while color_id in colors:
             color_id, color_hex = random.choice(list(COLORS.items()))
+        #    color_id, color_hex = random.choice(list(COLORS.items()))
         colors.append(color_id)
         img = show_color(color_hex)
-        scr.addstr(3, 2, n+', this is your initial color :) Press'\
-            ' any key to continue', curses.color_pair(1))
+        scr.addstr(3, 2, n+', this is your initial color. Hope you like it.\n'\
+            ' Close the color window and press any key to continue',\
+             curses.color_pair(4))
         scr.refresh()
         c = scr.getch()
         img.close()
     return colors
-
-def config_summary():
-    scr.addstr(1, 2, 'Initial color selection ' , curses.color_pair(2))
-    scr.addstr(2, 2, 'Locate yourself in the color map, and get ready for the'\
-        ' first round of empathy questions', curses.color_pair(3))
-    scr.addstr(3, 0, 'Press any key to continue',\
-        curses.color_pair(2))
-    scr.refresh()
-    img = show_color_map()
-    c = scr.getch()
-    img.close()
-    return c
-

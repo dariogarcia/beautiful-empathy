@@ -1,0 +1,24 @@
+#FF0000 red
+#FFA500 orange
+#FFFF00 yellow
+#7FFF00 chartreuse
+#00FF00 green
+#00FF7F spring, 
+#00FFFF cyan, 
+#007FFF a7f7fzure, 
+#0000FF blue, 
+#7F00FF violet, 
+#7F007F ?
+#FF00FF magenta, 
+#FF007F rose
+
+shades, tints and saturations:
+https://www.canva.com/colors/color-wheel/
+https://hexcolorcodes.org/change-color-saturation
+https://www.color-name.com/hex/80ff00
+
+https://www.color-name.com/full-magenta.color
+
+24x9 https://www.hiclipart.com/free-transparent-background-png-clipart-idshb
+24x6(minus 4tonesxcolor) https://www.hiclipart.com/free-transparent-background-png-clipart-cdkyn
+32x6 https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/d3c7ed72-1546-4d93-90b0-48e685c8e213/d4d6riq-65039eef-09ae-481f-b6ce-600f92654bf8.png/v1/fill/w_1280,h_1451,q_75,strp/hexagon_color_chart_by_skyjohn-d4d6riq.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwic3ViIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS53YXRlcm1hcmsiXSwib2JqIjpbW3sicGF0aCI6Ii9mL2QzYzdlZDcyLTE1NDYtNGQ5My05MGIwLTQ4ZTY4NWM4ZTIxMy9kNGQ2cmlxLTY1MDM5ZWVmLTA5YWUtNDgxZi1iNmNlLTYwMGY5MjY1NGJmOC5wbmciLCJ3aWR0aCI6Ijw9MTI4MCIsImhlaWdodCI6Ijw9MTQ1MSJ9XV0sIndtayI6eyJwYXRoIjoiL3dtL2QzYzdlZDcyLTE1NDYtNGQ5My05MGIwLTQ4ZTY4NWM4ZTIxMy9za3lqb2huLTQucG5nIiwib3BhY2l0eSI6OTUsInByb3BvcnRpb25zIjowLjQ1LCJncmF2aXR5IjoiY2VudGVyIn19.znEPmbuXKo9ydxou7s8iCTvWgaGsmAWLIS0sI1PV6H8

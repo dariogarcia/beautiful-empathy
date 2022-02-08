@@ -1,9 +1,12 @@
 import curses
 global curses
 from curses import wrapper
-from config import welcome_screen, init_color_pairs, get_num_players, get_names_players, choose_color
+from config import welcome_screen, init_font_color_pairs, get_num_players, get_names_players, choose_color
 from Questions import Questions
-from Game import Player, Game
+import Game
+from image_edit import show_color_map
+import Color_map_1
+
 
 def play_round(scr, num_round, questions, read_questions):
     scr.addstr(0, 0, '---------------------------'
@@ -152,7 +155,7 @@ def main(self):
     #scr.keypad(True)
     
     #Initialize colors & read questions 
-    init_color_pairs()
+    init_font_color_pairs()
     qs = Questions()
 
     #Welcome Screen
@@ -160,17 +163,21 @@ def main(self):
     #Player Definition
     n = get_num_players(scr)
     names = get_names_players(scr,n)
+
+    #Init board
+    color_map = Color_map_1()
     #First color
-    init_colors = choose_color(scr,names)
+    init_colors = choose_color(scr,names,color_map)
+    #init_colors = choose_color(scr,names)
 
     #Create Game
     gg = Game(names, init_colors, qs)
 
     #Show color map
-    show_color_map(gg)
+    #show_color_map(gg)
 
     #Show board
-    show_board(gg)
+    gg.show_board()
 
     #Start playing rounds
     for round_num in range(15):
