@@ -1,11 +1,13 @@
 from PIL import Image, ImageFont, ImageDraw
 
-def init_color_map(names, colors):
+def init_color_map(names, locations):
     img = Image.open('../boards/map_1.png')
     d1 = ImageDraw.Draw(img)
     font = ImageFont.truetype("../fonts/BeckyTahlia-MP6r.ttf", 80)
-    d1.text((10, 10),"test",(255,255,255),font=font)
+    for name, loc in zip(names,locations):
+        d1.text((10, 10),"test",(255,255,255),font=font)
     img.show()
+    return img
     
 def init_board():
     img = Image.open('../boards/initial_board.jpg')

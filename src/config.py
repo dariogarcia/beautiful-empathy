@@ -1,4 +1,4 @@
-from colors import Color_map
+import Color_map
 import random
 from image_edit import show_color, show_color_map
 
@@ -72,13 +72,11 @@ def choose_color(scr,names, color_map):
             '                  ', curses.color_pair(2)| curses.A_BLINK)
         scr.refresh()
         c = scr.getch()
-        color_id, color_hex = random.choice(color_map.colors)
-        #color_id, color_hex = random.choice(list(COLORS.items()))
+        color_id, color_meta = random.choice(list(color_map.colors.items()))
         while color_id in colors:
-            color_id, color_hex = random.choice(list(COLORS.items()))
-        #    color_id, color_hex = random.choice(list(COLORS.items()))
+            color_id, color_meta = random.choice(list(color_map.colors.items()))
         colors.append(color_id)
-        img = show_color(color_hex)
+        img = show_color(color_meta[0])
         scr.addstr(3, 2, n+', this is your initial color. Hope you like it.\n'\
             ' Close the color window and press any key to continue',\
              curses.color_pair(4))

@@ -3,9 +3,9 @@ global curses
 from curses import wrapper
 from config import welcome_screen, init_font_color_pairs, get_num_players, get_names_players, choose_color
 from Questions import Questions
-import Game
+from Game import Game
 from image_edit import show_color_map
-import Color_map_1
+from Color_map import Color_map
 
 
 def play_round(scr, num_round, questions, read_questions):
@@ -164,14 +164,14 @@ def main(self):
     n = get_num_players(scr)
     names = get_names_players(scr,n)
 
-    #Init board
-    color_map = Color_map_1()
+    #Init board. Hardcoded to map_1 in constructor
+    color_map = Color_map()
     #First color
     init_colors = choose_color(scr,names,color_map)
     #init_colors = choose_color(scr,names)
 
     #Create Game
-    gg = Game(names, init_colors, qs)
+    gg = Game(names, init_colors, qs, color_map)
 
     #Show color map
     #show_color_map(gg)
