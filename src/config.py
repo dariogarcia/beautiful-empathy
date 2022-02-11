@@ -1,6 +1,6 @@
 import Color_map
 import random
-from image_edit import show_color, show_color_map
+from image_edit import show_color
 
 def init_font_color_pairs():
     global curses
@@ -64,7 +64,7 @@ def get_names_players(scr,nplayers):
 
 
 def choose_color(scr,names, color_map):
-    colors = []
+    chosen_col_ids = []
     scr.addstr(1, 2, 'Each player gets an randomly assigned,'\
         ' unique initial color')
     for n in names:
@@ -72,15 +72,16 @@ def choose_color(scr,names, color_map):
             '                  ', curses.color_pair(2)| curses.A_BLINK)
         scr.refresh()
         c = scr.getch()
-        color_id, color_meta = random.choice(list(color_map.colors.items()))
-        while color_id in colors:
-            color_id, color_meta = random.choice(list(color_map.colors.items()))
-        colors.append(color_id)
-        img = show_color(color_meta[0])
+        rand_color = random.choice(color_map.colors)
+        while rand_color.id in chosen_col_ids or rand_color.in_use == True:
+            rand_color = random.choice(color_map.colors)
+        chosen_col_ids.append([rand_color.id])
+        img = show_color(rand_color.hex)
         scr.addstr(3, 2, n+', this is your initial color. Hope you like it.\n'\
             ' Close the color window and press any key to continue',\
              curses.color_pair(4))
         scr.refresh()
         c = scr.getch()
         img.close()
-    return colors
+    scr.clear()
+    return chosen_col_ids

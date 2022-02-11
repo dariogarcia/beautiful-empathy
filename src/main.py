@@ -4,8 +4,6 @@ from curses import wrapper
 from config import welcome_screen, init_font_color_pairs, get_num_players, get_names_players, choose_color
 from Questions import Questions
 from Game import Game
-from image_edit import show_color_map
-from Color_map import Color_map
 
 
 def play_round(scr, num_round, questions, read_questions):
@@ -142,7 +140,6 @@ def check_quit(c):
     return False
 
 def main(self):
-    q = Questions()
     global curses
     scr = curses.initscr()
     # Clear screen, add border
@@ -159,29 +156,32 @@ def main(self):
     qs = Questions()
 
     #Welcome Screen
-    c = welcome_screen(scr)
+    welcome_screen(scr)
     #Player Definition
-    n = get_num_players(scr)
-    names = get_names_players(scr,n)
-
-    #Init board. Hardcoded to map_1 in constructor
-    color_map = Color_map()
-    #First color
-    init_colors = choose_color(scr,names,color_map)
-    #init_colors = choose_color(scr,names)
+#n = get_num_players(scr)
+#names = get_names_players(scr,n)
+    n = 12
+    names = ["111","222","333","444","555","666","777","888","999","AAA","BBB","CCC"]
 
     #Create Game
-    gg = Game(names, init_colors, qs, color_map)
-
+    gg = Game(names, qs)
+    
+    #Get & update with first color
+    #init_colors = choose_color(scr, names, gg.color_map)
+    init_colors = [[25],[26],[27],[28],[29],[30],[31],[32],[33],[34],[35],[36]]
+    gg.update_color_players(names,init_colors)
+    
     #Show color map
-    #show_color_map(gg)
-
+    gg.show_color_map()
     #Show board
-    gg.show_board()
+    #gg.show_board()
+
+
 
     #Start playing rounds
+    done_questions = []
     for round_num in range(15):
-        hits,done_questions = play_round(scr, round_num, q, done_questions)
+        hits,done_questions = play_round(scr, round_num, qs, done_questions)
         get_card(scr, hits)
 
     #End program
