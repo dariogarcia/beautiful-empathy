@@ -59,13 +59,16 @@ def play_round(scr, num_round, questions, read_questions):
     scr.addstr(4, 0, 'You guessed '+str(hits)+' out of 5.'
         , curses.color_pair(3))
     if hits == 2:
-        scr.addstr(4, 0, 'Get a new color if you own 2 or less.'
+        scr.addstr(4, 0, 'Get a new color if you own 3 or less.'
             , curses.color_pair(3))
-    elif 2 < hits < 5:
+    elif hits == 3:
         scr.addstr(4, 0, 'Get a new color if you own 4 or less.'
             , curses.color_pair(3))
+    elif hits == 4:
+        scr.addstr(4, 0, 'Get a new color if you own 5 or less.'
+            , curses.color_pair(3))
     elif hits == 5:
-        scr.addstr(4, 0, 'Get a new color! You ROCK!!!'
+        scr.addstr(4, 0, 'Get a new color! Your empathy ROCKS!!!'
             , curses.color_pair(3))
     c = scr.getch()
     return hits, read_questions
@@ -134,11 +137,6 @@ def get_card(scr, hits):
                 scr.refresh()
                 c = scr.getch()
 
-def check_quit(c):
-    if c == ord('q'):
-        return True
-    return False
-
 def main(self):
     global curses
     scr = curses.initscr()
@@ -161,14 +159,14 @@ def main(self):
 #n = get_num_players(scr)
 #names = get_names_players(scr,n)
     n = 12
-    names = ["111","222","333","444","555","666","777","888","999","AAA","BBB","CCC"]
-
+    names = ["037","038","039","040","041","042","043","044","045","046","047","048"]
     #Create Game
     gg = Game(names, qs)
     
     #Get & update with first color
     #init_colors = choose_color(scr, names, gg.color_map)
-    init_colors = [[25],[26],[27],[28],[29],[30],[31],[32],[33],[34],[35],[36]]
+    init_colors = [[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48]]
+    #init_colors = [[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24]]
     gg.update_color_players(names,init_colors)
     
     #Show color map

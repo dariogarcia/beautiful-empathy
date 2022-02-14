@@ -28,7 +28,7 @@ class Game:
 
     def update_color_map(self):
         d1 = ImageDraw.Draw(self.color_map.map)
-        font = ImageFont.truetype("../fonts/Nivis-RYyl.ttf", 15)
+        font = ImageFont.truetype("../fonts/Excludeditalic-jEr99.ttf", 15)
         for name in self.names:
             for color in self.players[name]:
                 d1.text(self.color_map.colors[color].coords, name,\
