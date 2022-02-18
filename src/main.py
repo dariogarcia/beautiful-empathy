@@ -156,37 +156,46 @@ def main(self):
     #Welcome Screen
     welcome_screen(scr)
     #Player Definition
-#n = get_num_players(scr)
-#names = get_names_players(scr,n)
-    n = 12
-    names = ["037","038","039","040","041","042","043","044","045","046","047","048",\
-        "049","050","051","052","053","054","055","056","057","058",\
-        "059","060","061","062","063","064","065","066","067","068",\
-        "069","070","071","072"]
+    nplayers = get_num_players(scr)
+    names = get_names_players(scr,nplayers)
+    #nplayers = 12
+    #names = [\
+    #    "001","002","003","004","005","006","007","008","009",\
+    #    "010","011","012","013","014","015","016","017","018","019",\
+    #    "020","021","022","023","024","025","026","027","028","029",\
+    #    "030","031","032","033","034","035","036","037","038","039",\
+    #    "040","041","042","043","044","045","046","047","048","049",\
+    #    "050","051","052","053","054","055","056","057","058","059",\
+    #    "060","061","062","063","064","065","066","067","068","069",\
+    #    "070","071","072"]
+    
     #Create Game
-    gg = Game(names, qs)
+    gg = Game(scr, names, qs)
     
     #Get & update with first color
-    #init_colors = choose_color(scr, names, gg.color_map)
-    init_colors = [[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],\
-        [49],[50],[51],[52],[53],[54],[55],[56],[57],[58],\
-        [59],[60],[61],[62],[63],[64],[65],[66],[67],[68],\
-        [69],[70],[71],[72]]
-    #init_colors = [[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24]]
+    init_colors = choose_color(scr, names, gg.color_map)
+    #init_colors = [[1],[2],[3],[4],[5],[6],[7],[8],[9],\
+    #    [10],[11],[12],[13],[14],[15],[16],[17],[18],[19],\
+    #    [20],[21],[22],[23],[24],[25],[26],[27],[28],[29],\
+    #    [30],[31],[32],[33],[34],[35],[36],[37],[38],[39],\
+    #    [40],[41],[42],[43],[44],[45],[46],[47],[48],[49],\
+    #    [50],[51],[52],[53],[54],[55],[56],[57],[58],[59],\
+    #    [60],[61],[62],[63],[64],[65],[66],[67],[68],[69],\
+    #    [70],[71],[72]]
+    
     gg.update_color_players(names,init_colors)
     
     #Show color map
     gg.show_color_map()
     #Show board
-    #gg.show_board()
-
-
+    gg.show_board()
 
     #Start playing rounds
-    done_questions = []
-    for round_num in range(15):
-        hits,done_questions = play_round(scr, round_num, qs, done_questions)
-        get_card(scr, hits)
+    for round_num in range(5):
+        for player_name in names:
+            gg.play_round(round_num,player_name)
+        #hits,done_questions = play_round(scr, round_num, qs, done_questions)
+        #get_card(scr, hits)
 
     #End program
     curses.nocbreak()
