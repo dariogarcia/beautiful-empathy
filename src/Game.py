@@ -3,17 +3,28 @@ from PIL import Image, ImageFont, ImageDraw
 from Color_map import Color_map
 import random
 import curses
+import time
 
 class Game:
         
-    def __init__(self, scr, names, color_map):
+    def __init__(self, scr, names, questions):
         self.scr = scr
         self.players = dict(zip(names,[[]]*len(names)))
         self.names = names
+        self.questions = questions
         self.qs = None
         self.color_map = Color_map()
         self.mosaic = init_board()
 
+    def random_q(self):
+        random.shuffle(self.questions.list_of_q)
+        for q in self.questions.list_of_q:
+            if q.used:
+                continue
+            q.used = True
+            return q
+        raise Exception('Runned out of questions')
+        
     def show_board(self):
         self.mosaic.show()
 
@@ -43,16 +54,38 @@ class Game:
         self.scr.addstr(2, 2, 'A round of empathy questions is a about to start.')
         self.scr.addstr(3, 10, 'Painter:'+painter_name,curses.color_pair(3))
         self.scr.addstr(4, 10, 'Guesser:'+guesser_name,curses.color_pair(3))
-        self.scr.addstr(6, 2, 'Each question must first be read by the painter('\
-            +painter_name+')')
+        self.scr.addstr(6, 2, 'Each question must first be read by the painter')
         self.scr.addstr(7, 2, painter_name+' must quickly & instinctively '\
             'choose the best fitting word.')
-        self.scr.addstr(8, 2, 'The guesser ('+guesser_name+') can then guess which word the painter choose')
+        self.scr.addstr(8, 2, 'The guesser ('+guesser_name+') can then guess'\
+            ' which word the painter choose')
         self.scr.addstr(10, 2, 'Press any key to begin with the first sentence.',\
              curses.color_pair(2) | curses.A_BLINK)
         self.scr.refresh()
         c = self.scr.getch()
         self.scr.clear()
+
+    def print_question(self, q_num, painter_name, guesser_name):
+        self.scr.addstr(2, 2, 'Question number '+str(q_num),curses.color_pair(4))
+        self.scr.addstr(3, 2, 'Painter '+painter_name+' chose the word.',\
+            curses.color_pair(4))
+        self.scr.addstr(4, 2, 'Guesser '+guesser_name+' wait for '\
+            +painter_name+' and make your guess.', curses.color_pair(4))
+        question = self.random_q()
+        empty_mask = question.q.replace('[MASK]','_______')
+        self.scr.addstr(7,4,empty_mask)
+        self.scr.addstr(9,12,question.v1+' / '+question.v2,curses.color_pair(3))
+        self.scr.refresh()
+        time.sleep(10)
+        self.scr.addstr(12,2,'Press "H" if it was correctly guessed.'\
+            ' Any other key otherwise', curses.color_pair(2) | curses.A_BLINK)
+        self.scr.refresh()
+        c = self.scr.getch()
+        self.scr.clear()
+        if c == ord('H'): 
+            return 1
+        else:
+            return 0 
 
     def play_round(self,round_num,painter_name):
         #Who's who
@@ -65,7 +98,8 @@ class Game:
         #Empathy
         hits = 0
         for question_num in range(5):
-            hits += print_question()
+            hits += self.print_question(question_num,painter_name,guesser_name)
+        self.summary_end_questions(self, hits, painter_name,guesser_name)
         deck = end_empathy_info(painter_name,painter,hits)
         draw_card(deck)
         paint()
