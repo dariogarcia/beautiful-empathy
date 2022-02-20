@@ -67,7 +67,7 @@ class Game:
 
     def print_question(self, q_num, painter_name, guesser_name):
         self.scr.addstr(2, 2, 'Question number '+str(q_num),curses.color_pair(4))
-        self.scr.addstr(3, 2, 'Painter '+painter_name+' chose the word.',\
+        self.scr.addstr(3, 2, 'Painter '+painter_name+' choose the word.',\
             curses.color_pair(4))
         self.scr.addstr(4, 2, 'Guesser '+guesser_name+' wait for '\
             +painter_name+' and make your guess.', curses.color_pair(4))
@@ -76,7 +76,7 @@ class Game:
         self.scr.addstr(7,4,empty_mask)
         self.scr.addstr(9,12,question.v1+' / '+question.v2,curses.color_pair(3))
         self.scr.refresh()
-        time.sleep(10)
+        time.sleep(1)
         self.scr.addstr(12,2,'Press "H" if it was correctly guessed.'\
             ' Any other key otherwise', curses.color_pair(2) | curses.A_BLINK)
         self.scr.refresh()
@@ -86,6 +86,33 @@ class Game:
             return 1
         else:
             return 0 
+
+    def summary_question(self, last_hit, total_ques, q_num):
+        self.scr.addstr(2, 2, 'Question number '+str(q_num)+'/'\
+            +str(total_ques),curses.color_pair(4))
+        if last_hit:
+            self.scr.addstr(4, 2, 'Was CORRECTLY guessed :)')
+        else:
+            self.scr.addstr(4, 2, 'Was INCORRECTLY guessed :(')
+        self.scr.addstr(6,2,'Press any key for the next question.',\
+             curses.color_pair(2) | curses.A_BLINK)
+        self.scr.refresh()
+        c = self.scr.getch()
+        self.scr.clear()
+    
+    def summary_last_question(self, last_hit, total_ques, total_hits):
+        self.scr.addstr(2, 2, 'Last question...',curses.color_pair(4))
+        if last_hit:
+            self.scr.addstr(4, 2, 'Was CORRECTLY guessed :)')
+        else:
+            self.scr.addstr(4, 2, 'Was INCORRECTLY guessed :(')
+        self.scr.addstr(6, 2, 'Total correct guesses: '+str(total_hits),\
+             curses.color_pair(4))
+        self.scr.addstr(8,2,'Press any key for paiting!.',\
+             curses.color_pair(2) | curses.A_BLINK)
+        self.scr.refresh()
+        c = self.scr.getch()
+        self.scr.clear()
 
     def play_round(self,round_num,painter_name):
         #Who's who
@@ -97,9 +124,17 @@ class Game:
         self.init_round_info(painter_name,guesser_name)
         #Empathy
         hits = 0
-        for question_num in range(5):
-            hits += self.print_question(question_num,painter_name,guesser_name)
-        self.summary_end_questions(self, hits, painter_name,guesser_name)
-        deck = end_empathy_info(painter_name,painter,hits)
+        total_questions = 5
+        for question_num in range(1,total_questions+1):
+            q_hit = self.print_question(question_num,painter_name,guesser_name)
+            hits += q_hit
+            if total_questions == question_num:
+                self.summary_last_question(q_hit, total_questions, hits)
+            else:
+                self.summary_question(q_hit,total_questions,question_num)
+        #Deck drawing
+        deck = draw deck? end_empathy_info(painter_name,painter,hits)
         draw_card(deck)
+        #Update color map
+        #Beauty
         paint()
