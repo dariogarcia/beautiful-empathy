@@ -114,17 +114,16 @@ class Game:
         c = self.scr.getch()
         self.scr.clear()
 
-    def play_round(self,round_num,painter_name):
-        #Who's who
+    def who_is_who(self, painter_name):
         painter = self.players[painter_name]
         guesser_name, guesser = random.choice(list(self.players.items()))
         if len(self.players)>1:
             while guesser_name == painter_name:
                 guesser_name, guesser = random.choice(list(self.players.items()))
-        self.init_round_info(painter_name,guesser_name)
-        #Empathy
+        return guesser_name, guesser
+
+    def ask_questions(self, total_questions, painter_name, guesser_name):
         hits = 0
-        total_questions = 5
         for question_num in range(1,total_questions+1):
             q_hit = self.print_question(question_num,painter_name,guesser_name)
             hits += q_hit
@@ -132,9 +131,18 @@ class Game:
                 self.summary_last_question(q_hit, total_questions, hits)
             else:
                 self.summary_question(q_hit,total_questions,question_num)
-        #Deck drawing
-        deck = draw deck? end_empathy_info(painter_name,painter,hits)
-        draw_card(deck)
-        #Update color map
+        return hits
+
+    def play_round(self,round_num,painter_name):
+        guesser_name, guesser = self.who_is_who(painter_name)
+        self.init_round_info(painter_name,guesser_name)
+        #Empathy
+        hits = self.ask_questions(5, painter_name, guesser_name) 
+        #Get new colors
+        colors = self.get_new_colors(painter_name,hits)
+        #Get shapes
+        shapes = self.get_shapes(hits)        
+        #Summary
+        self.preprint_info(painter_name, hits, colors, shapes)
         #Beauty
-        paint()
+        self.paint(painter_name, colors, shapes)
