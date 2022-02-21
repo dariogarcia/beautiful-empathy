@@ -154,10 +154,12 @@ def main(self):
     qs = Questions()
 
     #Welcome Screen
-    welcome_screen(scr)
+    #welcome_screen(scr)
     #Player Definition
-    nplayers = get_num_players(scr)
-    names = get_names_players(scr,nplayers)
+    #nplayers = get_num_players(scr)
+    #names = get_names_players(scr,nplayers)
+    nplayers = 2
+    names = ['A9R','JWO']
     #nplayers = 12
     #names = [\
     #    "001","002","003","004","005","006","007","008","009",\

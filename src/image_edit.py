@@ -1,4 +1,5 @@
 from PIL import Image, ImageFont, ImageDraw
+import subprocess
 
 def init_color_map():
     img = Image.open('../boards/map_1.png')
@@ -17,6 +18,8 @@ def init_board():
 def show_color(color_hex):
     width = 400 
     height = 400 
-    img  = Image.new( mode = "RGB", size = (width, height), color=color_hex )
-    img.show()
-    return img
+    img  = Image.new( mode = "RGB", size = (width, height), color=color_hex)
+    tmp_path = "/tmp/last_color.png"
+    img.save(tmp_path,"PNG")
+    color_viewer = subprocess.Popen(['eog', tmp_path])
+    return color_viewer

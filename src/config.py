@@ -76,12 +76,13 @@ def choose_color(scr,names, color_map):
         while rand_color.id in chosen_col_ids or rand_color.in_use == True:
             rand_color = random.choice(color_map.colors)
         chosen_col_ids.append([rand_color.id])
-        img = show_color(rand_color.hex)
+        color_view = show_color(rand_color.hex)
         scr.addstr(3, 2, n+', this is your initial color. Hope you like it.\n'\
             ' Close the color window and press any key to continue',\
              curses.color_pair(4))
         scr.refresh()
         c = scr.getch()
-        img.close()
+        color_view.terminate()
+        color_view.kill()
     scr.clear()
     return chosen_col_ids

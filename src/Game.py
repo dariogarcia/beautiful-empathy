@@ -26,10 +26,10 @@ class Game:
         raise Exception('Runned out of questions')
         
     def show_board(self):
-        self.mosaic.show()
+        return mosaic_view = subprocess.Popen(['eog', self.mosaic])
 
     def show_color_map(self):
-        self.color_map.map.show()
+        return color_map_view = subprocess.Popen(['eog', self.color_map])
 
     def update_color_players(self, players_names, all_players_colors):
         for player_name,player_colors in zip(players_names,all_players_colors):
