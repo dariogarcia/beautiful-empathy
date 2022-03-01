@@ -4,6 +4,7 @@ from Color_map import Color_map
 import random
 import curses
 import time
+import subprocess
 
 class Game:
         
@@ -24,12 +25,17 @@ class Game:
             q.used = True
             return q
         raise Exception('Runned out of questions')
-        
+         
     def show_board(self):
-        return mosaic_view = subprocess.Popen(['eog', self.mosaic])
+        #need to store a tmp file for every board and color map
+        #either used as persistence, or being recomputed from
+        #status of Game
+        mosaic_view = subprocess.Popen(['eog', self.mosaic])
+        return 
 
     def show_color_map(self):
-        return color_map_view = subprocess.Popen(['eog', self.color_map])
+        color_map_view = subprocess.Popen(['eog', self.color_map.path])
+        return 
 
     def update_color_players(self, players_names, all_players_colors):
         for player_name,player_colors in zip(players_names,all_players_colors):
@@ -132,6 +138,37 @@ class Game:
             else:
                 self.summary_question(q_hit,total_questions,question_num)
         return hits
+
+    def choose_color_scr(self, painter):
+        scr.addstr(1, 2, 'Painter '+painter+' you can now choose a new color.')
+        scr.addstr(2, 2, 'Your options are written on the color map, and'\
+            ' include the numbers: '+str(), curses.color_pair(2))
+
+    def choose_color(self, painter):
+        owned_colors = self.players[painter]
+        not_chosen = True
+        while not_chosen:
+            available_colors = []
+            for owned_c in owned_colors:
+                for edge in self.color_map.edge_list:
+                    if owned_c in edge:
+                        candidates  = [x for x in edge if x != owned_c]
+                        available_colors.append([x for x in candidates if\
+                             not self.color_map.colors[x].in_use])
+            c = self.choose_color_scr(painter)
+            self.color_map.colors[int(c)].in_use = True
+            self.players[painter].append(int(c))
+            not_chosen = False
+        return
+
+    def get_new_colors(self, painter, hits):
+        num_owned_colors = len(self.players[painter])
+        num_new_colors = 1
+        if num_owned_colors < 6:
+            num_new_colors = 2
+        for i in range(num_new_colors):
+            self.choose_color(painter)
+        return        
 
     def play_round(self,round_num,painter_name):
         guesser_name, guesser = self.who_is_who(painter_name)
