@@ -82,7 +82,7 @@ def choose_color(scr,names, color_map):
              curses.color_pair(4))
         scr.refresh()
         c = scr.getch()
-        color_view.terminate()
+        #color_view.terminate()
         color_view.kill()
     scr.clear()
     return chosen_col_ids

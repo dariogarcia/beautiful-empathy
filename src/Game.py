@@ -5,6 +5,7 @@ import random
 import curses
 import time
 import subprocess
+import tempfile
 
 class Game:
         
@@ -13,9 +14,14 @@ class Game:
         self.players = dict(zip(names,[[]]*len(names)))
         self.names = names
         self.questions = questions
-        self.qs = None
+        #self.qs = None
         self.color_map = Color_map()
-        self.mosaic = init_board()
+        self.mosaic = Mosaic()#init_board()
+        #self.tmp_dir_path = tempfile.mkdtemp()
+        #need to creat classes for maps with persistence
+
+
+    import tempfile
 
     def random_q(self):
         random.shuffle(self.questions.list_of_q)

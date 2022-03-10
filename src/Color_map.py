@@ -16,7 +16,7 @@ class Color_map:
     def __init__(self):
         #Color_map_1
         self.map = Image.open("../boards/map_"+str(1)+".png")
-        self.path = "../boards/map_"+str(1)+".png"
+        #self.path = "../boards/map_"+str(1)+".png"
         self.colors = {
         1:Color(1,"#9c2c74",(302,33)),
         2:Color(2,"#3d1c55",(416,102)), 
@@ -225,3 +225,12 @@ class Color_map:
             (71,72), 
             (72,61) 
         ]
+
+    def get_map_w_players(self,players):
+        d1 = ImageDraw.Draw(self.map)
+        font = ImageFont.truetype("../fonts/Excludeditalic-jEr99.ttf", 15)
+        for name,colors in players.items():
+            for color in colors:
+                d1.text(self.colors[color].coords, name,\
+                    self.colors[color].text_col, font=font)
+
