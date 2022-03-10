@@ -1,20 +1,22 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, StringVar
 from PIL import Image,ImageTk
 
 class BeautifulEmpathyApp():
     def __init__(self, root):
+        #set tk objects
         self.root = root
         self.root.title('Beautiful Empathy')
         self.left_frame = None
         self.right_frame = None
         self.center_frame = None
-        #set up visuals
+        #set tk config
         self.configure_main_window()
         self.create_containers()
-        #vars
+        #game vars
         self.current_window = 0
         self.num_players = None
+        self.names_players = []
 
     def configure_main_window(self):
         #center screen
@@ -30,7 +32,7 @@ class BeautifulEmpathyApp():
         self.root.grid_rowconfigure(0, weight=1)
         self.root.grid_columnconfigure(1, weight=1)
         self.left_frame = tk.Frame(self.root, bg='cyan', width=600, height=600, pady=3)
-        self.center_frame = tk.Frame(self.root, bg='pink', width=300, height=600, pady=3)
+        self.center_frame = tk.Frame(self.root, bg='black', width=300, height=600, pady=3)
         self.right_frame = tk.Frame(self.root, bg='red', width=600, height=600, pady=3)
         self.left_frame.grid(row=0, column=0)
         self.center_frame.grid(row=0, column=1)
@@ -55,11 +57,18 @@ class BeautifulEmpathyApp():
           widgets.destroy()
 
     def show_next_screen(self,event):
+        #Transition from get num players to get names
         if  self.current_window == 0:
             self.num_players = int(event.widget.get())
+            self.names_players = [None]*self.num_players
             self.clear_center_frame()
             self.get_name_players()
-           
+        #Transition from get names to choose initial colors
+        if  self.current_window == 1:
+            self.names_players = list(event.widget.get())
+            self.clear_center_frame()
+            self.choose_colors_players()
+   
     def get_num_players(self):
         title = tk.Label(self.center_frame, text="Enter number of painters")
         plist = [i+1 for i in range(6)]
@@ -68,20 +77,44 @@ class BeautifulEmpathyApp():
         combo.bind('<<ComboboxSelected>>', self.show_next_screen)
         combo.pack(padx = 5, pady = 5)
 
+    def limit_name_len(self):
+        for idx, val in enumerate(self.names_players):
+            self.names_players[idx] = self.names_players[idx][:3]
+
     def get_name_players(self):
-        title = tk.Label(self.center_frame, text="Enter painter name\n(3 characters max)")
+        warning = tk.Label(self.center_frame, text="Enter painter names\n"\
+            "(3 characters MAX)")
+        warning.pack()
         for i in range(self.num_players):
-            painter = tk.Entry(self.center_frame, width = 5)
-            painter.insert(0,'Player'+str(i)+'name')
-            painter.pack(padx = 5, pady = 5)
+            name_label = tk.Label(self.center_frame, text="Player "+str(i+1))
+            name_label.pack()
+            self.names_players[i] = StringVar()
+            name_entry = tk.Entry(self.center_frame, bg="white", fg="black",\
+                 textvariable=self.names_players[i])
+            name_entry.pack()
+            self.names_players[i].trace('w', self.limit_name_len)
+        submit_button = tk.Button(self.center_frame, text="Submit", command=self.submit)
+        submit_button.pack()
+
+        #for i in range(self.num_players):
+        #    painter = tk.Entry(self.center_frame, width = 5)
+        #    painter.insert(0,'Player'+str(i)+'name')
+        #    painter.pack(padx = 5, pady = 5)
         #add button
         #check thereturn an
         #raise_next func
         #return 1
     #combo.get()
 
-root = tk.Tk()
-beauty = BeautifulEmpathyApp(root)
-beauty.get_num_players()
+if __name__ == "__main__":
+    root = tk.Tk()
+    beauty = BeautifulEmpathyApp(root)
+    beauty.get_num_players()
+    root.mainloop()
 
-root.mainloop()
+    #game.set_game_screens(all_screens)
+    #game.play()
+    #game.mainloop()
+
+
+
