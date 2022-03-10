@@ -1,3 +1,4 @@
 src/*.pyc
 src/__pycache__/
 tmp/*
+*/tmp_dirs/*
