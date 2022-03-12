@@ -18,8 +18,7 @@ class Color_map:
         font = ImageFont.truetype("../fonts/Excludeditalic-jEr99.ttf", 15)
         for c_id, color in self.colors.items():
             if color.player_name != None:
-                d1.text(self.colors[c_id].coords, color.player_name,\
-                    self.colors[c_id].text_col, font=font)
+                d1.text(self.colors[c_id].coords, color.player_name, fill=self.colors[c_id].text_col, font=font)
         tmp_file_path = os.path.join(self.path,'last_color_map.png')
         self.map.save(tmp_file_path,'PNG')
         return tmp_file_path   
