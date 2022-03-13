@@ -87,12 +87,12 @@ class BeautifulEmpathyApp():
         self.right_canvas.pack(fill='both', expand = True)
         mosaic = PhotoImage(file = '../boards/initial_board.png')
         root.base_mosaic = mosaic
-        self.right_canvas.create_image(0,50,image=mosaic,anchor = "nw")
+        self.right_canvas.create_image(0,0,image=mosaic,anchor = "nw")
     
-    def update_right_frame_widgets(self):
+    def update_tmp_right_frame_widgets(self):
         img_mosaic = PhotoImage(file = self.game.mosaic.get_updated_mosaic_path())
         root.base_mosaic = img_mosaic
-        self.right_canvas.create_image(0,50,image=img_mosaic,anchor = "nw")
+        self.right_canvas.create_image(0,0,image=img_mosaic,anchor = "nw")
 
     def clear_center_frame(self):
        for widgets in self.center_frame.winfo_children():
@@ -252,13 +252,17 @@ class BeautifulEmpathyApp():
         #col_label.pack()
         #info2 = tk.Label(self.center_frame, text="Shape chosen is:"+str(shape))
         #info2.pack()
-        self.right_canvas.bind("<Button 1>",self.paint_square)
+        self.game.mosaic.init_tmp_mosaic()
 
-    def paint_square(self, eventorigin):
-        global x,y
-        x = eventorigin.x
-        y = eventorigin.y
-        
+        self.current_color = owned_colors[0]
+        self.right_canvas.bind("<Button 1>", self.paint_square)
+
+    def paint_square(self, event):
+        x = event.x
+        y = event.y
+        self.game.mosaic.paint_square(x,y,self.current_color)
+        self.update_tmp_right_frame_widgets()
+         
 
 
 if __name__ == "__main__":
