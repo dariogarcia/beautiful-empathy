@@ -53,18 +53,23 @@ class Mosaic:
         file_path = os.path.join(self.path,'last_mosaic.png')
         self.img.save(file_path,'PNG')
 
+    def get_updated_tmp_mosaic_path(self):
+        tmp_file_path = os.path.join(self.path,'last_mosaic_tmp.png')
+        return tmp_file_path
+
     def get_updated_mosaic_path(self):
-    #    image = self.create_empty_image()
-    #    draw = self.draw_lines(image)
-    #    draw = self.paint_colors(image, colors)
-         tmp_file_path = os.path.join(self.path,'last_mosaic_tmp.png')
-    #     image.save(tmp_file_path,'PNG')
-         return tmp_file_path
+        return self.path+"/last_mosaic.png"
 
     def init_tmp_mosaic(self):
         file_path= os.path.join(self.path,'last_mosaic.png')
         self.tmp_img = Image.open(file_path)
+        tmp_file_path = os.path.join(self.path,'last_mosaic_tmp.png')
+        self.tmp_img.save(file_path,'PNG')
 
+    def persist_tmp(self):
+        file_path= os.path.join(self.path,'last_mosaic.png')
+        self.tmp_img.save(file_path,'PNG')
+ 
     def paint_square(self,x,y,c):
         scale = 62
         n_x = (int(x/(scale+1))*(scale+1))+int(x/(scale+1))+1
