@@ -1,236 +1,49 @@
-from PIL import Image
-
-class Color:
-    def __init__(self, c_id, c_hex, coordinates):
-         self.id = c_id
-         self.hex = c_hex
-         self.coords = coordinates
-         if c_id > 31:
-             self.text_col = (0,0,0)
-         else:
-             self.text_col = (255,255,255)
-         self.in_use = False
+from PIL import Image, ImageDraw, ImageFont
+import os
 
 class Color_map:
 
-    def __init__(self):
-        #Color_map_1
-        self.map = Image.open("../boards/map_"+str(1)+".png")
-        #self.path = "../boards/map_"+str(1)+".png"
-        self.colors = {
-        1:Color(1,"#9c2c74",(302,33)),
-        2:Color(2,"#3d1c55",(416,102)), 
-        3:Color(3,"#2d245d",(467,205)) ,
-        4:Color(4,"#05547b",(466,325)) ,
-        5:Color(5,"#046c65",(405,425)) ,
-        6:Color(6,"#046424",(302,483)) ,
-        7:Color(7,"#5c7716",(188,484)) ,
-        8:Color(8,"#9c931c",(79,423)) ,
-        9:Color(9,"#955c15",(21,325)) ,
-        10:Color(10,"#8b3c15",(25,180)), 
-        11:Color(11,"#8b2415",(72,100)) ,
-        12:Color(12,"#8d2435",(188,33)) ,
-        13:Color(13,"#9c2c74",(295,66)) ,
-        14:Color(14,"#4e246e",(389,125)) ,
-        15:Color(15,"#3c2c73",(430,207)) ,
-        16:Color(16,"#04749c",(431,301)) ,
-        17:Color(17,"#138d85",(377,398)) ,
-        18:Color(18,"#04842d",(295,444)) ,
-        19:Color(19,"#7c9c1d",(190,444)) ,
-        20:Color(20,"#9c931c",(103,394)) ,
-        21:Color(21,"#c4741d",(55,306)) ,
-        22:Color(22,"#bc4c1c",(55,219)) ,
-        23:Color(23,"#bc2c14",(100,125)) ,
-        24:Color(24,"#bc2c45",(190,66)) ,
-        25:Color(25,"#c42b93",(286,103)) ,
-        26:Color(26,"#642c8d",(352,145)) ,
-       	27:Color(27,"#441cb3",(392,209)) ,
-        28:Color(28,"#0c8cbd",(396,284)) ,
-        29:Color(29,"#1caca3",(358,360)) ,
-        30:Color(30,"#04a535",(278,407)) ,
-        31:Color(31,"#99c405",(207,405)) ,
-        32:Color(32,"#fcec03",(128,360)) ,
-        33:Color(33,"#fd9404",(88,290)) ,
-       	34:Color(34,"#f45b0b",(95,208)) ,
-        35:Color(35,"#ec240b",(135,145)) ,
-        36:Color(36,"#ec2c55",(205,110)) ,
-        37:Color(37,"#d474bc",(275,140)) ,
-        38:Color(38,"#956db4",(329,175)) ,
-       	39:Color(39,"#8366d4",(355,220)) ,
-       	40:Color(40,"#4cb3d4",(355,290)) ,
-        41:Color(41,"#55c3c0",(330,340)) ,
-        42:Color(42,"#3cbc65",(280,370)) ,
-	43:Color(43,"#b4dc3d",(210,370)) ,
-        44:Color(44,"#fcf465",(155,335)) ,
-        45:Color(45,"#fbad3e",(130,280)) ,
-        46:Color(46,"#f47c3d",(130,230)) ,
-        47:Color(47,"#ec6552",(155,180)) ,
-        48:Color(48,"#ec6c83",(220,140)) ,
-        49:Color(49,"#e495cc",(263,180)) ,
-        50:Color(50,"#b584dd",(305,200)) ,
-        51:Color(51,"#9c8adc",(325,245)) ,
-        52:Color(52,"#6dbcdb",(325,280)) ,
-        53:Color(53,"#84cdc6",(300,315)) ,
-        54:Color(54,"#6ecc8e",(265,335)) ,
-        55:Color(55,"#cce474",(225,335)) ,
-        56:Color(56,"#fdf47d",(185,315)) ,
-        57:Color(57,"#fccc7a",(170,280)) ,
-        58:Color(58,"#f3a47d",(165,244)) ,
-        59:Color(59,"#ec938b",(190,200)) ,
-        60:Color(60,"#ed9cab",(220,175)) ,
-        61:Color(61,"#f4c5e4",(255,217)) ,
-        62:Color(62,"#c8bddb",(280,228)) ,
-        63:Color(63,"#bdbfdb",(290,245)) ,
-        64:Color(64,"#6dbcdb",(288,270)) ,
-        65:Color(65,"#84cdc5",(280,291)) ,
-        66:Color(66,"#a2cfb0",(257,302)) ,
-        67:Color(67,"#dde6af",(225,307)) ,
-        68:Color(68,"#fcf0bc",(210,292)) ,
-        69:Color(69,"#fcdabc",(203,268)) ,
-        70:Color(70,"#f6cfb2",(203,248)) ,
-        71:Color(71,"#f2ccc5",(215,225)) ,
-        72:Color(72,"#fad6d8",(230,210))
-        }
-        self.edge_list = [
-            (1,2), 
-            (1,13), 
-            (2,3), 
-            (2,14), 
-            (3,4), 
-            (3,15), 
-            (4,5), 
-            (4,16), 
-            (5,6), 
-            (5,17), 
-            (6,7), 
-            (6,18), 
-            (7,8), 
-            (7,19), 
-            (8,9), 
-            (8,20), 
-            (9,10), 
-            (9,21), 
-            (10,11), 
-            (10,22), 
-            (11,12), 
-            (11,23), 
-            (12,1),
-            (12,24),
-            (13,14), 
-            (13,25), 
-            (14,15), 
-            (14,26), 
-            (15,16), 
-            (15,27), 
-            (16,17), 
-            (16,28), 
-            (17,18), 
-            (17,29), 
-            (18,19), 
-            (18,30), 
-            (19,20), 
-            (19,31), 
-            (20,21), 
-            (20,32), 
-            (21,22), 
-            (21,33), 
-            (22,23), 
-            (22,34), 
-            (23,24), 
-            (23,35), 
-            (24,25), 
-            (24,36),
-            (25,26), 
-            (25,37), 
-            (26,27), 
-            (26,38), 
-            (27,28), 
-            (27,39), 
-            (28,29), 
-            (28,40), 
-            (29,30), 
-            (29,41), 
-            (30,31), 
-            (30,42), 
-            (31,32), 
-            (31,43), 
-            (32,33), 
-            (32,44), 
-            (33,34), 
-            (33,45), 
-            (34,35), 
-            (34,46), 
-            (35,36), 
-            (35,47), 
-            (36,37), 
-            (36,48), 
-            (37,38), 
-            (37,48), 
-            (38,39), 
-            (38,50), 
-            (39,40), 
-            (39,51), 
-            (40,41), 
-            (40,52), 
-            (41,42), 
-            (41,53), 
-            (42,43), 
-            (42,54), 
-            (43,44), 
-            (43,55), 
-            (44,45), 
-            (44,56), 
-            (45,46), 
-            (45,57), 
-            (46,47), 
-            (46,58), 
-            (47,48), 
-            (47,59), 
-            (48,49), 
-            (48,60), 
-            (49,50), 
-            (49,61), 
-            (50,51), 
-            (50,62), 
-            (51,52), 
-            (51,63), 
-            (52,53), 
-            (52,64), 
-            (53,54), 
-            (53,65), 
-            (54,55), 
-            (54,66), 
-            (55,56), 
-            (55,67), 
-            (56,57), 
-            (56,68), 
-            (57,58), 
-            (57,69), 
-            (58,59), 
-            (58,70), 
-            (59,60), 
-            (59,71), 
-            (60,61), 
-            (60,72), 
-            (61,62), 
-            (62,63), 
-            (63,64), 
-            (64,65), 
-            (65,66), 
-            (66,67), 
-            (67,68), 
-            (68,69), 
-            (69,70), 
-            (70,71), 
-            (71,72), 
-            (72,61) 
-        ]
+    def __init__(self, type_map, tmp_path):
+        self.path = tmp_path
+        if type_map == 'circle_72':
+            import Circle72 as c72
+            self.map = Image.open("../boards/map_1.png")
+            self.colors = c72.get_initial_colors()
+            self.edges = c72.get_initial_edges()
+        else:
+            raise Exception('Type of map not recognized:'+type_map)
 
-    def get_map_w_players(self,players):
+    def get_updated_color_map_path(self):
         d1 = ImageDraw.Draw(self.map)
         font = ImageFont.truetype("../fonts/Excludeditalic-jEr99.ttf", 15)
-        for name,colors in players.items():
-            for color in colors:
-                d1.text(self.colors[color].coords, name,\
-                    self.colors[color].text_col, font=font)
+        for c_id, color in self.colors.items():
+            if color.player_name != None:
+                d1.text(self.colors[c_id].coords, color.player_name, fill=self.colors[c_id].text_col, font=font)
+        tmp_file_path = os.path.join(self.path,'last_color_map.png')
+        self.map.save(tmp_file_path,'PNG')
+        return tmp_file_path   
 
+    def add_color(self, player_name, color_id):
+        if self.colors[color_id].in_use:
+            raise Exception('Color already in use:'+color_id)
+        self.colors[color_id].in_use = True
+        self.colors[color_id].player_name = player_name
+
+    def owned_colors(self, player_name):
+        available = []
+        for c_id, color in self.colors.items():
+            if color.player_name == player_name:
+                available.append(c_id)
+        return available
+
+    def neighbour_colors(self, player_name, skip_unused):
+        owned = self.owned_colors(player_name)
+        candidates = []
+        for (c1,c2) in self.edges:
+            if c1 in owned and c2 not in owned:
+                if not (self.colors[c2].in_use and skip_unused):
+                    candidates.append(c2)
+            if c2 in owned and c1 not in owned:
+                if not(self.colors[c1].in_use and skip_unused):
+                    candidates.append(c1)
+        return candidates

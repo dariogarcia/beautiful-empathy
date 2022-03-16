@@ -1,4 +1,4 @@
-src/*.pyc
-src/__pycache__/
-tmp/*
-*/tmp_dirs/*
+*.py[cod]
+*$py.class
+**/__pycache__/
+**/tmp_dirs/*

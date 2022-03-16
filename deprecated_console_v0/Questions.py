@@ -7,6 +7,7 @@ class Question:
         self.v2 = v2
         self.used = False
 
+
 class Questions:
 
     from Questions import Question
