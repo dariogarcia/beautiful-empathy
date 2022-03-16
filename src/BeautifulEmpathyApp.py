@@ -92,12 +92,12 @@ class BeautifulEmpathyApp():
         self.right_canvas.create_image(0,0,image=mosaic,anchor = "nw")
     
     def update_tmp_right_frame_widgets(self):
-        img_mosaic = PhotoImage(file = self.game.mosaic.get_updated_tmp_mosaic_path())
+        img_mosaic = PhotoImage(file = self.game.mosaic.tmpboard_path)
         root.base_mosaic = img_mosaic
         self.right_canvas.create_image(0,0,image=img_mosaic,anchor = "nw")
 
     def update_right_frame_widgets(self):
-        img_mosaic = PhotoImage(file = self.game.mosaic.get_updated_mosaic_path())
+        img_mosaic = PhotoImage(file = self.game.mosaic.board_path)
         root.base_mosaic = img_mosaic
         self.right_canvas.create_image(0,0,image=img_mosaic,anchor = "nw")
 
@@ -276,7 +276,6 @@ class BeautifulEmpathyApp():
     def paint(self):
         self.painter_colors = self.game.hex_colors_player(self.current_player_name.get())
         self.current_color = self.painter_colors[0]
-        self.game.mosaic.init_tmp_mosaic()
         #Add radio button and link with click on right canvas
         info_label = tk.Label(self.center_frame, text=\
             "Choose a color to paint with:")
@@ -325,8 +324,8 @@ class BeautifulEmpathyApp():
         self.update_tmp_right_frame_widgets()
 
     def reset_mosaic(self,event=None):
+        self.game.mosaic.scrap_tmp()
         self.clear_center_frame()
-        self.game.mosaic.init_tmp_mosaic()
         self.update_right_frame_widgets()
         self.paint()
 

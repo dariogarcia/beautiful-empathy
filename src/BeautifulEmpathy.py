@@ -2,6 +2,7 @@ from Questions import Questions
 import tempfile
 from Color_map import Color_map
 from Mosaic import Mosaic
+
 class Game:
 
     def __init__(self,names,colors):
