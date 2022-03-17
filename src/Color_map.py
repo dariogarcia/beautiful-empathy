@@ -18,7 +18,8 @@ class Color_map:
         font = ImageFont.truetype("../fonts/Excludeditalic-jEr99.ttf", 15)
         for c_id, color in self.colors.items():
             if color.player_name != None:
-                d1.text(self.colors[c_id].coords, color.player_name, fill=self.colors[c_id].text_col, font=font)
+                d1.text(self.colors[c_id].coords, color.player_name,\
+                     fill=self.colors[c_id].text_col, font=font)
         tmp_file_path = os.path.join(self.path,'last_color_map.png')
         self.map.save(tmp_file_path,'PNG')
         return tmp_file_path   
@@ -36,14 +37,16 @@ class Color_map:
                 available.append(c_id)
         return available
 
-    def neighbour_colors(self, player_name, skip_unused):
+    def neighbour_colors(self, player_name, skip_used):
+        #returns list of colors neighbour to those of a player
+        #if requested, skip the ones used by other players
         owned = self.owned_colors(player_name)
         candidates = []
         for (c1,c2) in self.edges:
             if c1 in owned and c2 not in owned:
-                if not (self.colors[c2].in_use and skip_unused):
+                if not (self.colors[c2].in_use and skip_used):
                     candidates.append(c2)
             if c2 in owned and c1 not in owned:
-                if not(self.colors[c1].in_use and skip_unused):
+                if not(self.colors[c1].in_use and skip_used):
                     candidates.append(c1)
         return candidates

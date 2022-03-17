@@ -9,11 +9,9 @@ class Game:
         self.questions = Questions
         self.path = tempfile.mkdtemp(dir='./tmp_dirs')
         self.color_map = Color_map('circle_72',self.path)
-        self.mosaic = Mosaic(self.path,14,14,60)
-        self.players = names
         for name,color in zip(names,colors):
             self.color_map.add_color(name,color)
-
+        self.mosaic = Mosaic(self.path,14,14,60)
 
     def player_add_color(self,player_name,color_id):
             self.color_map.add_color(player_name,color_id)
@@ -39,7 +37,7 @@ class Game:
             return False
         else:
             return owned < hits+4
-
+    
     def player_neighbour_colors(self,player_name, skip_unused = False):
         colors = self.color_map.neighbour_colors(player_name, skip_unused)
         return colors

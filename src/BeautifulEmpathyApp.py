@@ -33,6 +33,7 @@ class BeautifulEmpathyApp():
         self.num_players = None
         self.names_players = []
         self.init_colors = []
+        #dynamic vars
         self.current_player_name = None
         self.current_round = None
         self.current_turn = None
@@ -92,6 +93,7 @@ class BeautifulEmpathyApp():
         self.right_canvas.create_image(0,0,image=mosaic,anchor = "nw")
     
     def update_tmp_right_frame_widgets(self):
+        #This function loads the unconfirmed mosaic being edited
         img_mosaic = PhotoImage(file = self.game.mosaic.tmpboard_path)
         root.base_mosaic = img_mosaic
         self.right_canvas.create_image(0,0,image=img_mosaic,anchor = "nw")
@@ -106,6 +108,7 @@ class BeautifulEmpathyApp():
           widgets.destroy()
  
     def check_names(self, var, index, mode):
+        #var, index and mode refer to the triggering event
         for idx, val in enumerate(self.names_players):
             #Limit to 3 chars
             string_name = self.names_players[idx].get()[:NAME_LEN_LIM]
@@ -194,8 +197,8 @@ class BeautifulEmpathyApp():
         self.clear_center_frame()
         info_label = tk.Label(self.center_frame, text="Which type of game you want to play?")
         info_label.pack()
-        both_button = tk.Button(self.center_frame, text="Beauty & Empathy")
-        both_button.pack()
+        #both_button = tk.Button(self.center_frame, text="Beauty & Empathy")
+        #both_button.pack()
         only_button = tk.Button(self.center_frame, text="Beauty only",\
              command=self.init_beauty_only)
         only_button.pack()
@@ -208,13 +211,18 @@ class BeautifulEmpathyApp():
         if self.current_round > NUM_ROUNDS:
             self.end_screen()
         else:
-            self.clear_center_frame()
             self.current_round+=1
             self.current_turn = 0
+            self.clear_center_frame()
+            round_label = tk.Label(self.center_frame, text=\
+                    "This is round number:"+str(self.current_round))
             info_label = tk.Label(self.center_frame, text=\
-                "press button for next round!")
+                "press the button to start this round!")
             info_label.pack()
-            only_button = tk.Button(self.center_frame, text="Next Round",\
+            info_label2 = tk.Label(self.center_frame, text=\
+                ", btw I love your mosaic. For realsies.")
+            info_label2.pack()
+            only_button = tk.Button(self.center_frame, text="Start Round",\
                  command=self.inter_turn)
             only_button.pack()
 
@@ -331,6 +339,8 @@ class BeautifulEmpathyApp():
 
     def confirm_mosaic(self,event=None):
         self.current_turn += 1
+        self.current_shapes = None
+        self.chosen_color = None
         self.game.mosaic.persist_tmp()
         self.inter_turn()
 
