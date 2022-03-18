@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, IntVar, StringVar, PhotoImage
+import tkinter.font as tkFont
 import random
 from BeautifulEmpathy import Game
 
@@ -40,8 +41,14 @@ class BeautifulEmpathyApp():
         self.num_hits = None
         self.current_shapes = None 
         self.chosen_color = None
+        self.available_clicks = None
+        self.done_clicks = None
         #game widgets
         self.combo_num_players = None
+
+   ###################
+   ##### WIDGETS ##### 
+   ###################
 
     def configure_main_window(self):
         screen_width = self.root.winfo_screenwidth()
@@ -88,10 +95,10 @@ class BeautifulEmpathyApp():
     def right_frame_widgets(self):
         self.right_canvas = tk.Canvas(self.right_frame, width = 900, height = 900)
         self.right_canvas.pack(fill='both', expand = True)
-        mosaic = PhotoImage(file = '../boards/initial_board.png')
+        mosaic = PhotoImage(file = '../boards/color_sets.png')
         root.base_mosaic = mosaic
         self.right_canvas.create_image(0,0,image=mosaic,anchor = "nw")
-    
+
     def update_tmp_right_frame_widgets(self):
         #This function loads the unconfirmed mosaic being edited
         img_mosaic = PhotoImage(file = self.game.mosaic.tmpboard_path)
@@ -102,11 +109,45 @@ class BeautifulEmpathyApp():
         img_mosaic = PhotoImage(file = self.game.mosaic.board_path)
         root.base_mosaic = img_mosaic
         self.right_canvas.create_image(0,0,image=img_mosaic,anchor = "nw")
-
+    
     def clear_center_frame(self):
        for widgets in self.center_frame.winfo_children():
           widgets.destroy()
  
+   ###################
+   ##### SCREENS ##### 
+   ###################
+
+    def init_screen(self):
+        tk.Label(self.center_frame, font=("Arial", 22), text="Welcome,\n"\
+             +"this is a game of feeling others\n"\
+             +" and paiting together\n"\
+             +"\n").pack()
+        tk.Label(self.center_frame, text=""\
+             +"\nOn your left is the Color Map\n"\
+             +"it show the colors you own and could own\n"\
+             +"\nOn your right there will be the Mosaic\n"\
+             +"the canvas you will paint collaboratively\n"\
+             +"\nBut first things first..."\
+             +"\n").pack()
+        self.update_top_frame_widgets()
+        self.get_num_players()
+
+    def get_num_players(self):
+        title = tk.Label(self.center_frame, text="How many painters will"\
+            " be playing today?")
+        title.pack()
+        plist = [i+1 for i in range(MAX_PLAYERS)]
+        self.num_players = IntVar()
+        self.combo_num_players = ttk.Combobox(self.center_frame,\
+             values = plist)
+        self.combo_num_players.bind('<<ComboboxSelected>>',\
+             self.get_name_players)
+        self.combo_num_players.pack(padx = 5, pady = 5)
+
+    def create_game(self):
+        self.game = Game(self.names_players,self.init_colors)
+
     def check_names(self, var, index, mode):
         #var, index and mode refer to the triggering event
         for idx, val in enumerate(self.names_players):
@@ -118,50 +159,11 @@ class BeautifulEmpathyApp():
                     string_name = ""
             self.names_players[idx].set(string_name)
 
-    def assign_rand_init_colors(self):
-        for i in range(self.num_players):
-            found = False
-            while not found:
-                c = random.randint(1,72)
-                if self.game.color_map.colors[c].in_use:
-                    continue
-                break
-            self.game.player_add_color(self.names_players[i].get(),c)
-            self.init_colors.append(c)
-
-    def create_game(self):
-        self.game = Game(self.names_players,self.init_colors)
-
-   ###################
-   ##### SCREENS ##### 
-   ###################
-
-    def init_screen(self):
-        main_title = tk.Label(self.center_frame, text="BEAUTIFUL EMPATHY\n\
-            A game of feeling others while paiting together")
-        main_title.pack()
-        self.update_top_frame_widgets()
-        self.get_num_players()
-
-    def get_num_players(self):
-        title = tk.Label(self.center_frame, text="How many painters will"\
-            " be joining us today?")
-        title.pack()
-        plist = [i+1 for i in range(MAX_PLAYERS)]
-        self.num_players = IntVar()
-        self.combo_num_players = ttk.Combobox(self.center_frame,\
-             values = plist)
-        self.combo_num_players.bind('<<ComboboxSelected>>',\
-             self.get_name_players)
-        self.combo_num_players.pack(padx = 5, pady = 5)
-
     def get_name_players(self,event=None):
         self.num_players = int(self.combo_num_players.get())
         self.clear_center_frame()
         self.names_players = [None]*self.num_players
-        warning = tk.Label(self.center_frame, text="Enter painter names\n"\
-            "(3 characters MAX)")
-        warning.pack()
+        tk.Label(self.center_frame, text="Enter painters names\n").pack()
         for i in range(self.num_players):
             name_label = tk.Label(self.center_frame, text="Player "+str(i+1))
             name_label.pack()
@@ -179,15 +181,14 @@ class BeautifulEmpathyApp():
             if len(name.get())<1:
                 return
         self.clear_center_frame()
-        self.assign_rand_init_colors()
+        self.init_colors = self.game.assign_rand_init_colors(\
+            self.num_players, self.names_players)
+        tk.Label(self.center_frame, text="These are your initial colors").pack()
         for name,color in zip(self.names_players,self.init_colors):
             if len(name.get())<1:
                 return
-            name_label = tk.Label(self.center_frame, text="Player "+\
-                name.get()+", this is your color")
-            name_label.pack()
-            tk.Label(self.center_frame, width = 20, background=\
-                self.game.color_map.colors[color].hex).pack()
+            tk.Label(self.center_frame, width=30, text=name.get(),\
+                background=self.game.color_map.colors[color].hex).pack()
         self.update_left_frame_widgets()
         nx_btn = tk.Button(self.center_frame, text="Next",\
              command=self.game_type_screen)
@@ -195,8 +196,7 @@ class BeautifulEmpathyApp():
     
     def game_type_screen(self):
         self.clear_center_frame()
-        info_label = tk.Label(self.center_frame, text="Which type of game you want to play?")
-        info_label.pack()
+        tk.Label(self.center_frame, text="Which type of game you want to play?").pack()
         #both_button = tk.Button(self.center_frame, text="Beauty & Empathy")
         #both_button.pack()
         only_button = tk.Button(self.center_frame, text="Beauty only",\
@@ -205,23 +205,23 @@ class BeautifulEmpathyApp():
 
     def init_beauty_only(self):
         self.current_round = 0
+        self.update_right_frame_widgets()
         self.inter_round()
  
     def inter_round(self):
-        if self.current_round > NUM_ROUNDS:
+        if self.current_round >= NUM_ROUNDS:
             self.end_screen()
         else:
             self.current_round+=1
             self.current_turn = 0
             self.clear_center_frame()
             round_label = tk.Label(self.center_frame, text=\
-                    "This is round number:"+str(self.current_round))
-            info_label = tk.Label(self.center_frame, text=\
-                "press the button to start this round!")
-            info_label.pack()
-            info_label2 = tk.Label(self.center_frame, text=\
-                ", btw I love your mosaic. For realsies.")
-            info_label2.pack()
+                    "This is round number:"+str(self.current_round)+"/"\
+                    +str(NUM_ROUNDS)).pack()
+            tk.Label(self.center_frame, text="Ready?").pack()
+            if self.current_round>1:
+                tk.Label(self.center_frame, text=\
+                    "btw I love your mosaic.\nFor realsies.").pack()
             only_button = tk.Button(self.center_frame, text="Start Round",\
                  command=self.inter_turn)
             only_button.pack()
@@ -251,16 +251,14 @@ class BeautifulEmpathyApp():
         (player_name = self.current_player_name.get(), skip_unused = True)
         owned_colors = self.game.hex_colors_player(self.current_player_name.get())
         self.clear_center_frame()
-        welcome_label = tk.Label(self.center_frame, text="You win a new color."\
-            +"\n CONGRATULATIONS "+self.current_player_name.get()+" !!!")
-        welcome_label.pack()
-        info_label = tk.Label(self.center_frame, text=\
-            "\nThese are the colors you own:")
-        info_label.pack()
+        tk.Label(self.center_frame, text="Because of empathy,"+\
+            self.current_player_name.get()+"\nyou get a new color :)\n").pack()
+        tk.Label(self.center_frame, text=\
+            "\nThese are the colors you own:").pack()
         for c in owned_colors:
             color_label = tk.Label(self.center_frame, width=50, background=c)
             color_label.pack()
-        info2_label = tk.Label(self.center_frame, text="\nYou can choose one of these colors:")
+        info2_label = tk.Label(self.center_frame, text="\n\nYou can choose one of these colors:")
         info2_label.pack()
         for c in available_colors:
             color_label = tk.Label(self.center_frame, width=50, text=str(c), background=self.game.color_map.colors[c].hex)
@@ -285,36 +283,41 @@ class BeautifulEmpathyApp():
         self.painter_colors = self.game.hex_colors_player(self.current_player_name.get())
         self.current_color = self.painter_colors[0]
         #Add radio button and link with click on right canvas
-        info_label = tk.Label(self.center_frame, text=\
-            "Choose a color to paint with:")
-        info_label.pack()
+        tk.Label(self.center_frame, text=\
+            "Which color you want to use?").pack()
         for idx,c in enumerate(self.painter_colors):
             color_label = tk.Label(self.center_frame,text=str(idx), width=50, background=c)
             color_label.pack()
-        #Empty combo return
+        #Clear combo selection
         self.chosen_color == None
-        combo = ttk.Combobox(self.center_frame, values = [x for x in range(len(self.painter_colors))])
-
+        combo = ttk.Combobox(self.center_frame, values =\
+             [x for x in range(len(self.painter_colors))])
         combo.bind('<<ComboboxSelected>>', self.color_paint_chosen)
         combo.pack()
         self.right_canvas.bind("<Button 1>", self.paint_square)
         #Add label with shape info
+        tk.Label(self.center_frame, text=\
+            "\nThis is what you can paint:\n").pack()
+        self.available_clicks = 0
+        self.done_clicks = 0
+        for shape,num in self.current_shapes.items():
+            if shape == 'c':
+                tk.Label(self.center_frame, text=str(num)+\
+                    " small squares").pack()
+                self.available_clicks+=num
+            elif shape == 'C':
+                tk.Label(self.center_frame, text=str(num)+\
+                    " large squares").pack()
+                self.available_clicks+=num*4
         info_label = tk.Label(self.center_frame, text=\
-            "These are the shapes you have to paint,\n and how many of them:\n"\
-            +"('c' stands for 1x1 squares. 'C' is 2x2.")
-        info_label.pack()
-        for s in self.current_shapes.items():
-            info_label = tk.Label(self.center_frame, text=s)
-            info_label.pack()
-        info_label = tk.Label(self.center_frame, text=\
-            "Paint satisfying the restrictions\n" 
-             +"hit RESET to start over\n"\
-            +"hit CONFIRM to continue.")
+            "\nHit RESET to start over\n"\
+            +"Hit CONFIRM to continue.\n")
         info_label.pack()
         #Add two buttons. confirm and reset
         reset_button = tk.Button(self.center_frame, text="RESET",\
              command=self.reset_mosaic)
         reset_button.pack()
+        tk.Label(self.center_frame, text="\n").pack()
         accept_button = tk.Button(self.center_frame, text="CONFIRM",\
              command=self.confirm_mosaic)
         accept_button.pack()
@@ -326,6 +329,9 @@ class BeautifulEmpathyApp():
         #if the combo aint selected yet
         if self.chosen_color == None:
             return
+        if self.available_clicks <= self.done_clicks:
+            return
+        self.done_clicks+=1
         x = event.x
         y = event.y
         self.game.mosaic.paint_square(x,y,self.painter_colors[self.chosen_color])
@@ -346,14 +352,18 @@ class BeautifulEmpathyApp():
 
     def end_screen(self):
         self.clear_center_frame()
-        info_label = tk.Label(self.center_frame, text=\
-            "This is the result of your empathy and artistry\n"\
-            +"file stored in: "+self.game.mosaic.path)
+        info_label = tk.Label(self.center_frame, text="Your mosaic is done"\
+            +"\nThis is the result of your empathy and artistry\n"\
+            +"file stored in: "+self.game.mosaic.board_path)
         info_label.pack()
         
+def set_default_font():
+    default_font = tkFont.nametofont("TkDefaultFont")
+    default_font.configure(size=13)
 
 if __name__ == "__main__":
     root = tk.Tk()
+    set_default_font()
     beauty = BeautifulEmpathyApp(root)
     beauty.init_screen()
     beauty.create_game()

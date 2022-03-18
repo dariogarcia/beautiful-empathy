@@ -2,6 +2,7 @@ from Questions import Questions
 import tempfile
 from Color_map import Color_map
 from Mosaic import Mosaic
+import random
 
 class Game:
 
@@ -41,6 +42,19 @@ class Game:
     def player_neighbour_colors(self,player_name, skip_unused = False):
         colors = self.color_map.neighbour_colors(player_name, skip_unused)
         return colors
+
+    def assign_rand_init_colors(self,num_players, names_players):
+        rand_init_colors = []
+        for i in range(num_players):
+            found = False
+            while not found:
+                c = random.randint(1,72)
+                if self.color_map.colors[c].in_use:
+                    continue
+                break
+            self.player_add_color(names_players[i].get(),c)
+            rand_init_colors.append(c)
+        return rand_init_colors
 
     def get_rand_shape(self, hits, owned):
         if owned < 4:

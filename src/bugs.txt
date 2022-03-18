@@ -1,4 +1,3 @@
-fix functional look
 fix color map 1 repeated colors
     circle72 color 20 == 8 check other duplicates
-move non-screen functions from BEA to BE.py
+check large squares input
