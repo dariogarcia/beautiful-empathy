@@ -6,6 +6,7 @@ from BeautifulEmpathy import Game
 
 MAX_PLAYERS=6
 NUM_ROUNDS=5
+NUM_QUESTIONS=5
 NAME_LEN_LIM=3
 WINDOW_WIDTH=1800
 WINDOW_HEIGHT=900
@@ -238,6 +239,13 @@ class BeautifulEmpathyApp():
 
     def play_new_turn(self):
         self.current_player_name = self.names_players[self.current_turn]
+        self.clear_center_frame()
+        round_label = tk.Label(self.center_frame, text=\
+                "This is round number:"+str(self.current_round)+"/"\
+                +str(NUM_ROUNDS)+'\n').pack()
+        turn_label = tk.Label(self.center_frame, text=\
+             "It's the turn of player :"+
+             str(self.current_player_name.get()+"\n")).pack()
         if self.beauty_only == True:
             #Simulates empathy
             self.num_hits = random.randint(0,5)
@@ -247,7 +255,16 @@ class BeautifulEmpathyApp():
 
     def play_empathy(self):
         #TODO play empathy here
-
+        tk.Label(self.center_frame, text="Painter is "+self.current_player_name.get()).pack()
+        for i in range(NUM_QUESTIONS):
+            numq_label = tk.Label(self.center_frame, text=\
+                    "Question number:"+str(i)+"/"\
+                    +str(NUM_QUESTIONS)).pack()
+            info_label = tk.Label(self.center_frame, text=\
+                    "Press the button to see the question\n"
+                    +"Once it shows, the painter must quickly decide the best answer\n"
+                    +"Then the guesser tries to figure it out.").pack()
+        #add button to show question
         self.check_empathy_result(self)
 
     def check_empathy_result(self):
@@ -263,16 +280,15 @@ class BeautifulEmpathyApp():
         available_colors = self.game.player_neighbour_colors\
         (player_name = self.current_player_name.get(), skip_unused = True)
         owned_colors = self.game.hex_colors_player(self.current_player_name.get())
-        self.clear_center_frame()
-        tk.Label(self.center_frame, text="Because of empathy,"+\
+        tk.Label(self.center_frame, text="Because of empathy, "+\
             self.current_player_name.get()+"\nyou get a new color :)\n").pack()
         tk.Label(self.center_frame, text=\
             "\nThese are the colors you own:").pack()
         for c in owned_colors:
             color_label = tk.Label(self.center_frame, width=50, background=c)
             color_label.pack()
-        info2_label = tk.Label(self.center_frame, text="\n\nYou can choose one of these colors:")
-        info2_label.pack()
+        tk.Label(self.center_frame, text="\n\nChoose one of these colors\n"
+            +"and add them to your palette").pack()
         for c in available_colors:
             color_label = tk.Label(self.center_frame, width=50, text=str(c), background=self.game.color_map.colors[c].hex)
             color_label.pack()
@@ -310,7 +326,7 @@ class BeautifulEmpathyApp():
         self.right_canvas.bind("<Button 1>", self.paint_square)
         #Add label with shape info
         tk.Label(self.center_frame, text=\
-            "\nThis is what you can paint:\n").pack()
+            "\nYou can paint:\n").pack()
         self.available_clicks = 0
         self.done_clicks = 0
         for shape,num in self.current_shapes.items():
@@ -330,7 +346,7 @@ class BeautifulEmpathyApp():
         reset_button = tk.Button(self.center_frame, text="RESET",\
              command=self.reset_mosaic)
         reset_button.pack()
-        tk.Label(self.center_frame, text="\n").pack()
+        tk.Label(self.center_frame, text="").pack()
         accept_button = tk.Button(self.center_frame, text="CONFIRM",\
              command=self.confirm_mosaic)
         accept_button.pack()
