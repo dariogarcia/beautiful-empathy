@@ -34,6 +34,7 @@ class BeautifulEmpathyApp():
         self.num_players = None
         self.names_players = []
         self.init_colors = []
+        self.beauty_only = None
         #dynamic vars
         self.current_player_name = None
         self.current_round = None
@@ -205,6 +206,7 @@ class BeautifulEmpathyApp():
 
     def init_beauty_only(self):
         self.current_round = 0
+        self.beauty_only = True
         self.update_right_frame_widgets()
         self.inter_round()
  
@@ -236,8 +238,19 @@ class BeautifulEmpathyApp():
 
     def play_new_turn(self):
         self.current_player_name = self.names_players[self.current_turn]
-        #Simulates empathy
-        self.num_hits = random.randint(0,5)
+        if self.beauty_only == True:
+            #Simulates empathy
+            self.num_hits = random.randint(0,5)
+            self.check_empathy_result()
+        else:
+            self.play_empathy()
+
+    def play_empathy(self):
+        #TODO play empathy here
+
+        self.check_empathy_result(self)
+
+    def check_empathy_result(self):
         #Get num owned colors
         num_owned_colors = self.game.num_colors_player(self.current_player_name)
         #If deserved, offer available options
