@@ -1,4 +1,3 @@
-move number and num players after game type?
 fix color map 1 repeated colors
     circle72 color 20 == 8 check other duplicates
 check large squares input in BE.py

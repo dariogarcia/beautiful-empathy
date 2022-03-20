@@ -1,4 +1,5 @@
 import random
+import time
 import tkinter as tk
 from tkinter import ttk, IntVar, StringVar, PhotoImage
 import tkinter.font as tkFont
@@ -255,7 +256,7 @@ class BeautifulEmpathyApp():
                 "This is round number:"+str(self.current_round)+"/"\
                 +str(NUM_ROUNDS)+'\n').pack()
         turn_label = tk.Label(self.center_frame, text=\
-             "It's the turn of player :"+
+             "It's the turn of player "+
              str(self.current_player_name.get()+"\n")).pack()
         if self.beauty_only == True:
             #Simulates empathy
@@ -268,43 +269,49 @@ class BeautifulEmpathyApp():
     def play_empathy(self):
         if self.num_empathy < NUM_QUESTIONS:
             self.play_empathy_turn()
+        else:
+            self.empathy_end()
 
     def play_empathy_turn(self):
         tk.Label(self.center_frame, text="Empathy phase", \
              font=('Helvetica 16 bold')).pack()
         self.num_empathy+=1
         self.current_question = self.game.get_rand_question()
-        tk.Label(self.center_frame, text="Painter is "+\
+        tk.Label(self.center_frame, text="The Painter this round is "+\
             self.current_player_name.get()).pack()
         tk.Label(self.center_frame, text="Decide who the guesser is\n"\
-            +"(random, alfabetting, clockwise, ...)\n").pack()
-        numq_label = tk.Label(self.center_frame, text=\
-            "Question "+str(self.num_empathy)+" out of "\
-            +str(NUM_QUESTIONS)).pack()
-        tk.Label(self.center_frame, text=\
-            "Press the button to see the question\n").pack()
-        tk.Button(self.center_frame, text="SHOW QUESTION",\
-             command=self.show_question).pack()
+            +"(random, alphabet, clockwise, ...)\n"\
+            +"Press the button to start the round\n").pack()
+        tk.Button(self.center_frame, text="SHOW QUESTION "+str(self.num_empathy)\
+            +"/"+str(NUM_QUESTIONS), command=self.show_question).pack()
 
     def show_question(self):
         self.clear_center_frame()
         self.current_question = self.game.get_rand_question()
-        clear_q = self.current_question.q.replace("[MASK]","[   ]")
-        tk.Label(self.center_frame, text=clear_q,\
+        clear_q = self.current_question.q.replace("[MASK]","[ ? ]")
+        tk.Label(self.center_frame, text=clear_q+'\n',\
              font=('Helvetica 16 italic')).pack()
-        tk.Label(self.center_frame, text="\n").pack()
         tk.Label(self.center_frame, text=self.current_player_name.get()\
-            +" Read the sentence outloud,\n"\
-            +" click below to see the options,\n"\
-            +"and instinctively decide what feels more natural").pack()
+            +", read the sentence outloud,\n"\
+            +"then click below to see the options,\n"\
+            +"and instinctively and quickly decide\n"\
+            +"which option feels more natural").pack()
         tk.Button(self.center_frame, text="SEE OPTIONS",\
              command=self.show_options).pack()
     
     def show_options(self):
         self.clear_center_frame()
+        clear_q = self.current_question.q.replace("[MASK]","[   ]")
+        tk.Label(self.center_frame, text=clear_q,\
+             font=('Helvetica 16 italic')).pack()
         tk.Label(self.center_frame, text=self.current_question.v1+\
              "<--?-->"+self.current_question.v2,\
-              font=("Arial", 25)).pack()
+              font=("Helvetica", 21)).pack()
+        root.update()
+        self.show_options_after_5_sec()
+
+    def show_options_after_5_sec(self):
+        time.sleep(3)
         tk.Label(self.center_frame, text="\n").pack()
         tk.Label(self.center_frame, text="Once the painter has decided,\n"\
             +"The guesser can guess.\n").pack()
@@ -317,13 +324,26 @@ class BeautifulEmpathyApp():
     def question_hit(self):
         self.num_hits+=1
         self.current_question = None
+        self.clear_center_frame()
         self.play_empathy()
 
     def question_miss(self):
         self.current_question = None
+        self.clear_center_frame()
         self.play_empathy()
 
+    def empathy_end(self):
+        #print results
+        tk.Label(self.center_frame, text=\
+            "You guessed correctly "+str(self.num_hits)+" out of "\
+            +str(NUM_QUESTIONS)+" questions").pack()
+        tk.Label(self.center_frame, text=\
+            "Click the button for the Beauty phase\n").pack()
+        tk.Button(self.center_frame, text="Let's paint!",\
+             command=self.check_empathy_result).pack()
+
     def check_empathy_result(self):
+        self.clear_center_frame()
         #Get num owned colors
         num_owned_colors = self.game.num_colors_player(self.current_player_name)
         #If deserved, offer available options
