@@ -1,4 +1,7 @@
-move number and num players after game type
+move number and num players after game type?
 fix color map 1 repeated colors
     circle72 color 20 == 8 check other duplicates
 check large squares input in BE.py
+
+unify empathy turn look on center frame, by function to initialize painter and q_num info
+make the central widget the one overflowing the others, and increase its width for text margin

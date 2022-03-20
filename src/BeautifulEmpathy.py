@@ -7,7 +7,7 @@ import random
 class Game:
 
     def __init__(self,names,colors):
-        self.questions = Questions
+        self.questions = Questions()
         self.path = tempfile.mkdtemp(dir='./tmp_dirs')
         self.color_map = Color_map('circle_72',self.path)
         for name,color in zip(names,colors):
@@ -78,3 +78,12 @@ class Game:
                 return {'c':8,'C':2}
             else:#4 or 5 hits
                 return {'c':16}
+
+    def get_rand_question(self):
+        #Failsafe. Cant know how many qs are.
+        for i in range(1000):
+            idx = random.choice(range(len(self.questions.list_of_q)))
+            if not self.questions.list_of_q[idx].used:
+                self.questions.list_of_q[idx].used = True
+                return self.questions.list_of_q[idx]
+        raise Exception("Runned out of questions. All used.")
