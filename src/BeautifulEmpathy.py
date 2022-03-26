@@ -17,6 +17,13 @@ class Game:
     def player_add_color(self,player_name,color_id):
             self.color_map.add_color(player_name,color_id)
 
+    def colors_player(self,name):
+        cols_pl = {} 
+        for c_id,color in self.color_map.colors.items():
+            if color.player_name == name:
+                cols_pl[c_id] = color
+        return cols_pl
+
     def num_colors_player(self,name):
         count = 0 
         for c_id,color in self.color_map.colors.items():

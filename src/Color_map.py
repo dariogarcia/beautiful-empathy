@@ -49,4 +49,4 @@ class Color_map:
             if c2 in owned and c1 not in owned:
                 if not(self.colors[c1].in_use and skip_used):
                     candidates.append(c1)
-        return candidates
+        return list(set(candidates))

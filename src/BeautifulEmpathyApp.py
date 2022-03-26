@@ -36,7 +36,7 @@ class BeautifulEmpathyApp():
         self.num_players = None
         self.names_players = []
         self.init_colors = []
-        self.beauty_only = None
+        self.b_only = None
         #dynamic vars
         self.current_player_name = None
         self.current_round = None
@@ -67,7 +67,7 @@ class BeautifulEmpathyApp():
         self.root.grid_columnconfigure(1, weight=1)
         self.top_frame = tk.Frame(self.root, bg='white', width=1600, height=200)
         self.left_frame = tk.Frame(self.root, bg='black', width=500, height=900)
-        self.center_frame = tk.Frame(self.root, bg='white', width=200, height=900)
+        self.center_frame = tk.Frame(self.root, bg='white', width=400, height=1200)
         self.right_frame = tk.Frame(self.root, bg='black', width=900, height=900)
         self.top_frame.grid(row=0, column=0, columnspan=3)
         self.left_frame.grid(row=1, column=0)
@@ -210,12 +210,12 @@ class BeautifulEmpathyApp():
         only_button.pack()
 
     def beauty_and_empathy(self):
-        self.beauty_only = False
+        self.b_only = False
         self.num_empathy = 0
         self.start_game()    
     
     def beauty_only(self):
-        self.beauty_only = True
+        self.b_only = True
         self.start_game()    
 
     def start_game(self):
@@ -258,7 +258,7 @@ class BeautifulEmpathyApp():
         turn_label = tk.Label(self.center_frame, text=\
              "It's the turn of player "+
              str(self.current_player_name.get()+"\n")).pack()
-        if self.beauty_only == True:
+        if self.b_only == True:
             #Simulates empathy
             self.num_hits = random.randint(0,5)
             self.check_empathy_result()
@@ -270,6 +270,7 @@ class BeautifulEmpathyApp():
         if self.num_empathy < NUM_QUESTIONS:
             self.play_empathy_turn()
         else:
+            self.num_empathy = 0
             self.empathy_end()
 
     def play_empathy_turn(self):
@@ -301,7 +302,7 @@ class BeautifulEmpathyApp():
     
     def show_options(self):
         self.clear_center_frame()
-        clear_q = self.current_question.q.replace("[MASK]","[   ]")
+        clear_q = self.current_question.q.replace("[MASK]","[ ? ]")
         tk.Label(self.center_frame, text=clear_q,\
              font=('Helvetica 16 italic')).pack()
         tk.Label(self.center_frame, text=self.current_question.v1+\
@@ -333,6 +334,7 @@ class BeautifulEmpathyApp():
         self.play_empathy()
 
     def empathy_end(self):
+        self.clear_center_frame()
         #print results
         tk.Label(self.center_frame, text=\
             "You guessed correctly "+str(self.num_hits)+" out of "\
@@ -385,18 +387,19 @@ class BeautifulEmpathyApp():
         self.paint()
 
     def paint(self):
-        self.painter_colors = self.game.hex_colors_player(self.current_player_name.get())
-        self.current_color = self.painter_colors[0]
+        self.painter_colors = self.game.colors_player(self.current_player_name.get())
+        self.current_color = random.choice(list(self.painter_colors.values())).hex
         #Add radio button and link with click on right canvas
         tk.Label(self.center_frame, text=\
             "Which color you want to use?").pack()
-        for idx,c in enumerate(self.painter_colors):
-            color_label = tk.Label(self.center_frame,text=str(idx), width=50, background=c)
+        color_indices = []
+        for idx,c in self.painter_colors.items():
+            color_label = tk.Label(self.center_frame,text=str(idx), width=50, background=c.hex)
             color_label.pack()
+            color_indices.append(idx)
         #Clear combo selection
         self.chosen_color == None
-        combo = ttk.Combobox(self.center_frame, values =\
-             [x for x in range(len(self.painter_colors))])
+        combo = ttk.Combobox(self.center_frame, values = color_indices)
         combo.bind('<<ComboboxSelected>>', self.color_paint_chosen)
         combo.pack()
         self.right_canvas.bind("<Button 1>", self.paint_square)
@@ -439,7 +442,7 @@ class BeautifulEmpathyApp():
         self.done_clicks+=1
         x = event.x
         y = event.y
-        self.game.mosaic.paint_square(x,y,self.painter_colors[self.chosen_color])
+        self.game.mosaic.paint_square(x,y,self.painter_colors[self.chosen_color].hex)
         self.update_tmp_right_frame_widgets()
 
     def reset_mosaic(self,event=None):
