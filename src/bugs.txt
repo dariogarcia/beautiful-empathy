@@ -1,8 +1,6 @@
-keep painting x more rounds functionality or stop painting at the end of given round
+do not allow overpainting
 
 globalize TextWrapper, clear_q, splitted_q
-
-12 outsude conecrivity?
 
 check large squares input in BE.py
 
