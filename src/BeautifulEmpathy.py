@@ -38,11 +38,11 @@ class Game:
                 hexes.append(color.hex)
         return hexes
 
-    def gets_new_color(self, hits,owned):
+    def gets_new_color(self, hits, owned):
+        if hits == 5:
+            return True
         if owned < 4:
             return True
-        elif hits==0:
-            return False
         else:
             return owned < hits+4
     
