@@ -1,9 +1,10 @@
-paint over works?
-num turns shit
-click counter
-growing list of colors
-question cut by len
+keep painting x more rounds functionality or stop painting at the end of given round
+
+globalize TextWrapper, clear_q, splitted_q
+
+12 outsude conecrivity?
+
 check large squares input in BE.py
-keep painting x more rounds functionality
+
 unify empathy turn look on center frame, by function to initialize painter and q_num info
 make the central widget the one overflowing the others? center needs a canvas!

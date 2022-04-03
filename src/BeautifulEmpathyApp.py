@@ -1,16 +1,18 @@
 import random
 import time
+from textwrap import TextWrapper
 import tkinter as tk
 from tkinter import ttk, IntVar, StringVar, PhotoImage
 import tkinter.font as tkFont
 from BeautifulEmpathy import Game
 
 MAX_PLAYERS=6
-NUM_ROUNDS=5
+NUM_ROUNDS=6
 NUM_QUESTIONS=5
 NAME_LEN_LIM=3
 WINDOW_WIDTH=1800
 WINDOW_HEIGHT=900
+SENTENCE_WIDTH=40
 
 class BeautifulEmpathyApp():
 
@@ -45,7 +47,7 @@ class BeautifulEmpathyApp():
         self.current_shapes = None 
         self.chosen_color = None
         self.available_clicks = None
-        self.done_clicks = None
+        self.done_clicks = StringVar()
         self.num_empathy = None
         self.current_question = None
         #game widgets
@@ -290,7 +292,10 @@ class BeautifulEmpathyApp():
         self.clear_center_frame()
         self.current_question = self.game.get_rand_question()
         clear_q = self.current_question.q.replace("[MASK]","[ ? ]")
-        tk.Label(self.center_frame, text=clear_q+'\n',\
+        tw = TextWrapper()
+        tw.width = SENTENCE_WIDTH
+        splitted_q = "\n".join(tw.wrap(clear_q))
+        tk.Label(self.center_frame, text=splitted_q+'\n',\
              font=('Helvetica 16 italic')).pack()
         tk.Label(self.center_frame, text=self.current_player_name.get()\
             +", read the sentence outloud,\n"\
@@ -303,7 +308,10 @@ class BeautifulEmpathyApp():
     def show_options(self):
         self.clear_center_frame()
         clear_q = self.current_question.q.replace("[MASK]","[ ? ]")
-        tk.Label(self.center_frame, text=clear_q,\
+        tw = TextWrapper()
+        tw.width = SENTENCE_WIDTH
+        splitted_q = "\n".join(tw.wrap(clear_q))
+        tk.Label(self.center_frame, text=splitted_q,\
              font=('Helvetica 16 italic')).pack()
         tk.Label(self.center_frame, text=self.current_question.v1+\
              "<--?-->"+self.current_question.v2,\
@@ -407,7 +415,7 @@ class BeautifulEmpathyApp():
         tk.Label(self.center_frame, text=\
             "\nYou can paint:\n").pack()
         self.available_clicks = 0
-        self.done_clicks = 0
+        self.done_clicks.set("0")
         for shape,num in self.current_shapes.items():
             if shape == 'c':
                 tk.Label(self.center_frame, text=str(num)+\
@@ -429,6 +437,8 @@ class BeautifulEmpathyApp():
         accept_button = tk.Button(self.center_frame, text="CONFIRM",\
              command=self.confirm_mosaic)
         accept_button.pack()
+        tk.Label(self.center_frame, text="Painted squares:").pack()
+        tk.Label(self.center_frame, textvariable=self.done_clicks).pack()
 
     def color_paint_chosen(self,event=None):
         self.chosen_color = int(event.widget.get())
@@ -437,9 +447,9 @@ class BeautifulEmpathyApp():
         #if the combo aint selected yet
         if self.chosen_color == None:
             return
-        if self.available_clicks <= self.done_clicks:
+        if self.available_clicks <= int(self.done_clicks.get()):
             return
-        self.done_clicks+=1
+        self.done_clicks.set(str(int(self.done_clicks.get())+1))
         x = event.x
         y = event.y
         self.game.mosaic.paint_square(x,y,self.painter_colors[self.chosen_color].hex)
