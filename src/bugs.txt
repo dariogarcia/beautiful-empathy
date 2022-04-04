@@ -1,4 +1,4 @@
-do not allow overpainting
+do not allow overpainting. requires keeping track of painted squares :P
 
 globalize TextWrapper, clear_q, splitted_q
 

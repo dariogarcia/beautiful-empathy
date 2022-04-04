@@ -1,8 +1,10 @@
 \documentclass[twocolumn]{article}
 \usepackage[utf8]{inputenc}
 
-\title{Beautiful Empathy}
+\title{Beautiful Empathy\\
+\textit{now with Artificial Intelligence and Blockchain}}
 %\date{December 2020}
+\author{Dario Garcia - dariogarcia@gmail.com}
 
 % \usepackage{natbib}
 \usepackage{graphicx}
@@ -10,37 +12,58 @@
 \newcommand{\lvl}[1]{\vspace{0.5cm}\Large{\textbf{#1}}\vspace{0.2cm}}
 \newcommand{\sublvl}[1]{\vspace{0.3cm}\large{\textit{#1}}\vspace{0.1cm}}
 
+\usepackage[margin=0.5in]{geometry}
 
+\usepackage{setspace}
+\renewcommand{\baselinestretch}{1.4} 
 
 \begin{document}
 
 \maketitle
 
-\textit{Author}: Dario Garcia - dariogarcia@gmail.com
+\lvl{}
+\vspace{-1cm}
+\center{\textbf{Beautiful Empathy} is a collaborative app/board/computer game in which players collaborate to create a unique and colorful mosaic.}
+
+\center{The game has no scoring system and there is no official winner.\\ The main outcome of the game is the mosaic built together.}
+
+
 
 \begin{figure}[h!]
 \centering
-\includegraphics[scale=0.15]{First_ever.jpg}
-\caption{Mosaic created with Beautiful Empathy}
+\includegraphics[scale=0.25]{First_ever.jpg}
+\caption{Mosaic created with Beautiful Empathy using a deprecated color map.}
 \label{fig:mosaic}
 \end{figure}
 
-\lvl{}
-\vspace{-1cm}
 
-Beautiful Empathy is a collaborative board game in which players create a unique and colorful mosaic. The game has no scoring system and there is no official winner. The main outcome of the game is the mosaic built together. 
+\null
+\vspace{1cm}
+\lvl{The Story}
 
-\lvl{Theme}
+Lita loves art. She is happy when surrounded by beauty. For her house, Lita wants a unique mosaic, a completely original piece. For that, she hires her favourite artists (you) to paint a shared mosaic in turns.
 
-Lita loves art. She is happy when surrounded by beauty. For her house, Lita wants a mosaic full of colors unlike any before. To produce a completely original piece, she hires her favourite artists (the players) to paint in turns on a shared mosaic. Before a painting session, Lita spends some time with the painters, trying to understand them, to empathize with them. When Lita guesses the painter's minds, the artist becomes more productive and resourceful. By the end, all that matters is that the painters and Lita, are happy with the resulting artpiece.
+Before a painting session, Lita spends some time with the painters, trying to understand them. When Lita guesses the painter's minds, the artist becomes extra motivated, and is capable of doing more with the same. 
+
+By the end, all that matters is that the painters and Lita, are happy with the resulting artpiece.
+
+\newpage
+
+\begin{figure}[t!]
+\centering
+\includegraphics[scale=0.23]{sario210222.png}
+\caption{Mosaic created with the circle color map.}
+\label{fig:mosaic_2}
+\end{figure}
+
 
 \lvl{Game Script}
 
-The game is played in six painting turns. On each turn, one player is the painter, who will \textit{feel} words in sentences, and paint on the mosaic. Another player is Lita, who tries to guess the painter's mind. Typically, roles will rotate among players, but well-intentioned alterations on who plays Lita are welcome. 
+The game is played in six turns. On each turn, one player is the painter, who will \textit{feel} words in sentences, and paint on the mosaic. Another player is Lita, who tries to guess the painter's mind. Typically, roles will rotate among players, but well-intentioned alterations on who plays Lita are welcome. 
 
 \lvl{The Empathy}
 
-Each turn has two phases, the empathy and the beauty. In the first part, the empathy, Lita tries to figure out which word would the painter use to complete a sentence (out of two optional words). For example:
+FIrst, Lita tries to figure out which word would the painter use to complete a sentence, out of two optional words.
 
 \begin{centering}
 \texttt{Sentence:}\\
@@ -70,12 +93,12 @@ The painter can use any combination of colors in its palette when placing the ti
 
 Each player starts the game with one random color. Or choose freely if you prefer. This is about having fun.
 
-\begin{figure*}[th!]
+\begin{figure}[th!]
 \centering
-\includegraphics[scale=0.6]{../boards/map_1.png}
+\includegraphics[scale=0.67]{../boards/map_1.png}
 \caption{Color map. There are 72 colors, starting on the center-left outside color (1 is the darkest pink, the clearest 61) and moving clock-wise. Each color is connected with the four colors that surround it. Border colors are also connected to all other border colors (outer among themselves and inners among themselves).}
 \label{fig:color_map}
-\end{figure*}
+\end{figure}
 
 To gain a new color during your turn as a painter, first count the number of correct guesses from Lita. Then, if you have less than 4 colors, you get a new color. If you have 4 or more, and Lita did not guess a single word right, you get a color if you own less colors than correct guesses + 4. For example, a painter who owns 5 colors will get a new color if 2 or more questions were correctly answered by Lita. Five correct answers will always get the painter a new color, regardless of the colors already owned.
 
@@ -85,6 +108,10 @@ When adding a new color, the painter can choose from those directly connected to
 \sublvl{See Available Shapes}
 
 After trying to get a color, the painter will find the material it has to work on the mosaic. This will depend on the palette and Litas empathy. A larger palette requires more paint, as more correct guesses motivate the painter to also paint more. In detail: 
+
+{\setstretch{1.0}
+
+
 \begin{itemize}
     \item \textbf{Palette size 1 to 3}:
     \begin{itemize}
@@ -106,6 +133,7 @@ After trying to get a color, the painter will find the material it has to work o
     \end{itemize}
 \end{itemize}
 
+}
 
 \sublvl{Place the Tiles}
 
@@ -127,6 +155,13 @@ At this point, this painter's turn is over. Call the next one in!
 
 The Game ends after six rounds. Or whenever you want. Once this is happens, take a look at the mosaic you created through empathy, and enjoy the beauty of your collaborative creation.
 
+
+
+\lvl{But wait...}
+
+The Artificial Intelligence, right... Well, turns out sentences used to measure empathy in the game are generated by an AI. We use neural network based language models to generate random but coherent sentences. Then we use the same model to come up with pairs of words which make the same sense in a position within the sentence. This way, when a player picks one word over the other is out of pure personality.
+
+... and the blockchain ... guess you could turn your mosaics into NFTs or something? :)
 % \bibliographystyle{plain}
 % \bibliography{references}
 \end{document}
