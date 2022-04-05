@@ -7,7 +7,6 @@ import tkinter.font as tkFont
 from BeautifulEmpathy import Game
 
 MAX_PLAYERS=6
-NUM_ROUNDS=6
 NUM_QUESTIONS=5
 NAME_LEN_LIM=3
 WINDOW_WIDTH=1800
@@ -39,6 +38,7 @@ class BeautifulEmpathyApp():
         self.names_players = []
         self.init_colors = []
         self.b_only = None
+        self.num_rounds = None
         #dynamic vars
         self.current_player_name = None
         self.current_round = None
@@ -168,6 +168,18 @@ class BeautifulEmpathyApp():
 
     def get_name_players(self,event=None):
         self.num_players = int(self.combo_num_players.get())
+        if self.num_players == 1:
+            self.num_rounds = 10
+        elif self.num_players == 2:
+            self.num_rounds = 8
+        elif self.num_players == 3:
+            self.num_rounds = 6
+        elif self.num_players == 4:
+            self.num_rounds = 5
+        elif self.num_players == 5:
+            self.num_rounds = 4
+        elif self.num_players == 6:
+            self.num_rounds = 3
         self.clear_center_frame()
         self.names_players = [None]*self.num_players
         tk.Label(self.center_frame, text="Enter painters names\n").pack()
@@ -191,13 +203,14 @@ class BeautifulEmpathyApp():
         self.init_colors = self.game.assign_rand_init_colors(\
             self.num_players, self.names_players)
         tk.Label(self.center_frame, text="These are your initial colors").pack()
+        tk.Label(self.center_frame, text="It's a good time to discuss your chromatic interests").pack()
         for name,color in zip(self.names_players,self.init_colors):
             if len(name.get())<1:
                 return
             tk.Label(self.center_frame, width=30, text=name.get(),\
                 background=self.game.color_map.colors[color].hex).pack()
         self.update_left_frame_widgets()
-        nx_btn = tk.Button(self.center_frame, text="Next",\
+        nx_btn = tk.Button(self.center_frame, text="Ready to Roll!",\
              command=self.game_type_screen)
         nx_btn.pack()
     
@@ -226,7 +239,7 @@ class BeautifulEmpathyApp():
         self.inter_round()
  
     def inter_round(self):
-        if self.current_round >= NUM_ROUNDS:
+        if self.current_round >= self.num_rounds:
             self.end_screen()
         else:
             self.current_round+=1
@@ -234,7 +247,7 @@ class BeautifulEmpathyApp():
             self.clear_center_frame()
             round_label = tk.Label(self.center_frame, text=\
                     "This is round number:"+str(self.current_round)+"/"\
-                    +str(NUM_ROUNDS)).pack()
+                    +str(self.num_rounds)).pack()
             tk.Label(self.center_frame, text="Ready?").pack()
             if self.current_round>1:
                 tk.Label(self.center_frame, text=\
@@ -256,7 +269,7 @@ class BeautifulEmpathyApp():
         self.clear_center_frame()
         round_label = tk.Label(self.center_frame, text=\
                 "This is round number:"+str(self.current_round)+"/"\
-                +str(NUM_ROUNDS)+'\n').pack()
+                +str(self.num_rounds)+'\n').pack()
         turn_label = tk.Label(self.center_frame, text=\
              "It's the turn of player "+
              str(self.current_player_name.get()+"\n")).pack()
