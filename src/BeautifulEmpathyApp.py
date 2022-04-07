@@ -249,12 +249,20 @@ class BeautifulEmpathyApp():
                     "This is round number:"+str(self.current_round)+"/"\
                     +str(self.num_rounds)).pack()
             tk.Label(self.center_frame, text="Ready?").pack()
-            if self.current_round>1:
+            if self.current_round==1:
+                only_button = tk.Button(self.center_frame, text="Start Round",\
+                     command=self.inter_turn)
+                only_button.pack()
+            elif self.current_round>1:
                 tk.Label(self.center_frame, text=\
-                    "btw I love your mosaic.\nFor realsies.").pack()
-            only_button = tk.Button(self.center_frame, text="Start Round",\
-                 command=self.inter_turn)
-            only_button.pack()
+                    "btw I love your mosaic.\nFor realsies."\
+                    +"If you like the mosaic as it is,\n"\
+                    +" you can end the game here.").pack()
+                button = tk.Button(self.center_frame, text="End Game"\
+                     +" here", command=self.end_screen)
+                button.pack()
+            else:
+                raise Exception("Unexpected round number:"+str(self.current_round))
 
     def inter_turn(self):
         #All players have painted

@@ -1,5 +1,4 @@
 import os
-import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
 
@@ -35,6 +34,7 @@ class Mosaic:
  
     def paint_square(self,x,y,c):
         scale = 62
+        print(x,y)
         n_x = (int(x/(scale+1))*(scale+1))+int(x/(scale+1))+1
         n_y = (int(y/(scale+1))*(scale+1))+int(y/(scale+1))+1
         tmp_image = Image.open(self.tmpboard_path)

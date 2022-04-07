@@ -12,7 +12,7 @@
 \newcommand{\lvl}[1]{\vspace{0.5cm}\Large{\textbf{#1}}\vspace{0.2cm}}
 \newcommand{\sublvl}[1]{\vspace{0.3cm}\large{\textit{#1}}\vspace{0.1cm}}
 
-\usepackage[margin=0.5in]{geometry}
+\usepackage[margin=0.7in]{geometry}
 
 \usepackage{setspace}
 \renewcommand{\baselinestretch}{1.4} 
@@ -31,8 +31,8 @@
 
 \begin{figure}[h!]
 \centering
-\includegraphics[scale=0.25]{First_ever.jpg}
-\caption{Mosaic created with Beautiful Empathy using a deprecated color map.}
+\includegraphics[scale=0.22]{First_ever.jpg}
+\caption{Mosaic created with an early version of the game, using a now deprecated color map.}
 \label{fig:mosaic}
 \end{figure}
 
@@ -43,7 +43,7 @@
 
 Lita loves art. She is happy when surrounded by beauty. For her house, Lita wants a unique mosaic, a completely original piece. For that, she hires her favourite artists (you) to paint a shared mosaic in turns.
 
-Before a painting session, Lita spends some time with the painters, trying to understand them. When Lita guesses the painter's minds, the artist becomes extra motivated, and is capable of doing more with the same. 
+But before a painting session, Lita likes to spends some time with the painters, trying to understand them. When Lita guesses the painter's minds in these little chats, the artist becomes extra motivated, and is capable of doing more artwork. 
 
 By the end, all that matters is that the painters and Lita, are happy with the resulting artpiece.
 
@@ -51,7 +51,7 @@ By the end, all that matters is that the painters and Lita, are happy with the r
 
 \begin{figure}[t!]
 \centering
-\includegraphics[scale=0.23]{sario210222.png}
+\includegraphics[scale=0.2]{sario210222.png}
 \caption{Mosaic created with the circle color map.}
 \label{fig:mosaic_2}
 \end{figure}
@@ -59,55 +59,60 @@ By the end, all that matters is that the painters and Lita, are happy with the r
 
 \lvl{Game Script}
 
-The game is played in six turns. On each turn, one player is the painter, who will \textit{feel} words in sentences, and paint on the mosaic. Another player is Lita, who tries to guess the painter's mind. Typically, roles will rotate among players, but well-intentioned alterations on who plays Lita are welcome. 
+The game is played in turns. On each turn, one player is the painter, who will \textit{feel} words in sentences and paint on the mosaic. Another player is Lita, who tries to guess the painter's mind. Typically, roles will rotate among players. Well-intentioned alterations on who plays Lita are welcome. 
 
 \lvl{The Empathy}
 
-FIrst, Lita tries to figure out which word would the painter use to complete a sentence, out of two optional words.
+Lita tries to figure out which word did the painter choose to complete a sentence, out of two options.
 
 \begin{centering}
 \texttt{Sentence:}\\
-\textit{The tree was --------- in the middle of the forest}\\
+\textit{The tree was [\ \ \ \ \ \ ] in the middle of the forest}\\
 \texttt{Options:}\\
 \textit{shaking} | \textit{shinning}\\
 \end{centering}
 \vspace{0.5cm}
 
-The painter must first read the sentence outloud with the two options, and quickly decide by instinct (and in silence) which one feels better. Lita must then guess which of the two options the painter chose. Empathy is key in this part.
+The painter must first read the sentence outloud with the two options, and quickly decide by instinct (and in silence) which one feels better, more fitting. Lita must then guess which of the two options the painter chose. Empathy is key in this part.
 
-After a round of 5 questions, and count the number of correct ones. More correct answers by Lita will better motivate the painter for the second part of the turn, the beauty. 
-
+At the end of 5 rounds of guesses, count the correct ones. The empathy can be simulated by a uniform random (``Only Beauty'' option).
 
 \lvl{The Beauty}
 
-During this part, and in this order, the painter:
+In this order, the painter:
 \begin{itemize}
  \item tries to \textit{add a new color} to it's palette
  \item draws cards to \textit{see the shapes available}
  \item \textit{place the tiles} on the mosaic
 \end{itemize}
 
-The painter can use any combination of colors in its palette when placing the tiles. Once all tiles have been placed, the turn is over and a new one can begin.
 
 \sublvl{Add a New Color}
 
-Each player starts the game with one random color. Or choose freely if you prefer. This is about having fun.
+Each player starts the game with one random color. To see if you get a new color, apply the following rules in order until one applies. Consider $C$ is the number of colors owned by the painter, and $G$ the number of correct guesses by Lita. 
 
-\begin{figure}[th!]
+\begin{enumerate}
+ \item $C<4$ : Get a new color.
+ \item $G=5$ : Get a new color.
+ \item $G=0$ : Do not get a new color.
+ \item $C<G+4$ : Get a new color. 
+\end{enumerate}
+For example, a painter who owns 5 colors will get a new color if 2 or more questions were correctly answered by Lita. Five correct answers will always get the painter a new color, regardless of the colors already owned.
+
+
+\begin{figure}[b!]
 \centering
-\includegraphics[scale=0.67]{../boards/map_1.png}
-\caption{Color map. There are 72 colors, starting on the center-left outside color (1 is the darkest pink, the clearest 61) and moving clock-wise. Each color is connected with the four colors that surround it. Border colors are also connected to all other border colors (outer among themselves and inners among themselves).}
+\includegraphics[scale=0.65]{map_1_numbered.png}
+\caption{Circle72 Color map. 72 colors, Numbered clock-wise, outside to inside, starting on the pink wedge. Each color is connected with the four colors that surround it. Inner and outer border colors are also connected to all other inner and outer border colors respectively.}
 \label{fig:color_map}
 \end{figure}
 
-To gain a new color during your turn as a painter, first count the number of correct guesses from Lita. Then, if you have less than 4 colors, you get a new color. If you have 4 or more, and Lita did not guess a single word right, you get a color if you own less colors than correct guesses + 4. For example, a painter who owns 5 colors will get a new color if 2 or more questions were correctly answered by Lita. Five correct answers will always get the painter a new color, regardless of the colors already owned.
-
-When adding a new color, the painter can choose from those directly connected to a color already owned. The colors each player owns are marked in the color map. Color can only be owned by a single player.
+When adding a new color, the painter can choose any color directly connected to a color already owned. The colors each player owns are marked in the color map. A given color can only be owned by a single painter.
 
 
 \sublvl{See Available Shapes}
 
-After trying to get a color, the painter will find the material it has to work on the mosaic. This will depend on the palette and Litas empathy. A larger palette requires more paint, as more correct guesses motivate the painter to also paint more. In detail: 
+After trying to get a color, the painter will find the material it has to work on the mosaic. This will depend on the palette and Litas empathy. A larger palette requires more paint, and more correct guesses motivate the painter further. In detail: 
 
 {\setstretch{1.0}
 
@@ -135,9 +140,18 @@ After trying to get a color, the painter will find the material it has to work o
 
 }
 
+
+\begin{figure}[b!]
+\centering
+\includegraphics[scale=0.25]{last_mosaic_sario.png}
+\caption{Mosaic created with Beautiful Empathy with the Circle71 color map.}
+\label{fig:mosaic}
+\end{figure}
+
+
 \sublvl{Place the Tiles}
 
-All that is left to do is for the painter to place the tiles on the mosaic. The painter has absolute freedom to do so, while the other painters can comment on the artistic aspects of it, before and after it is done. The placed tiles can be of any color available in the painter's pallette, and in any combination (different tiles, different colors). Try to respect the size of big squares, and the work of others.
+All that is left to do is for the painter to place the tiles on the mosaic. The painter has absolute freedom to do so, while the other painters can comment on the artistic aspects of it, before and after it is done. The placed tiles can be of any color available in the painter's pallette, and in any combination (different tiles, different colors). Respect for the restrictions of big squares and the work of others, is highly encouraged but not enforced.
 % 
 % \sublvl{Inspiration Bonus}
 % 
@@ -149,7 +163,11 @@ All that is left to do is for the painter to place the tiles on the mosaic. The 
 % \end{itemize}
 % 
 % 
+
 At this point, this painter's turn is over. Call the next one in!
+
+
+
 
 \lvl{End of Game}
 
@@ -159,7 +177,7 @@ The Game ends after six rounds. Or whenever you want. Once this is happens, take
 
 \lvl{But wait...}
 
-The Artificial Intelligence, right... Well, turns out sentences used to measure empathy in the game are generated by an AI. We use neural network based language models to generate random but coherent sentences. Then we use the same model to come up with pairs of words which make the same sense in a position within the sentence. This way, when a player picks one word over the other is out of pure personality.
+The Artificial Intelligence, right... Well, turns out sentences used to motivate empathy in the game are generated by an AI. We use neural network based language models to generate random but coherent sentences. Then we use the same model to come up with pairs of words which make the same sense in a position within the sentence. This way, when a player picks one word over the other, is out of subjectivity. If the player does so quickly, it becomes a soul-bounding subconscious response.
 
 ... and the blockchain ... guess you could turn your mosaics into NFTs or something? :)
 % \bibliographystyle{plain}
