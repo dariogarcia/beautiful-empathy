@@ -1,10 +1,18 @@
+add to rules painting max and painting restrictions
+color desplegable
+color wheel pure blue
+
+
 click location phase
 
 do not allow overpainting. requires keeping track of painted squares :P
 
 globalize TextWrapper, clear_q, splitted_q
 
-check large squares input in BE.py
+store status squares in var
+	check large squares input in BE.py
+	check white remain or end
+	overpaint?
 
 unify empathy turn look on center frame, by function to initialize painter and q_num info
 make the central widget the one overflowing the others? center needs a canvas!

@@ -3,4 +3,5 @@
 **/__pycache__/
 **/tmp_dirs/*
 */rules/*log
+*/rules/*aux
 */rules/*synctex.gz

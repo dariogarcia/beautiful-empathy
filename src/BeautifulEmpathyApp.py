@@ -258,6 +258,9 @@ class BeautifulEmpathyApp():
                     "btw I love your mosaic.\nFor realsies."\
                     +"If you like the mosaic as it is,\n"\
                     +" you can end the game here.").pack()
+                only_button = tk.Button(self.center_frame, text="Play Next Round",\
+                     command=self.inter_turn)
+                only_button.pack()
                 button = tk.Button(self.center_frame, text="End Game"\
                      +" here", command=self.end_screen)
                 button.pack()

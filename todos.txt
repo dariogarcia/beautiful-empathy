@@ -1,0 +1,6 @@
+Parse questions_v3.csv
+Turn color selection from list to radio button
+Reset last click only
+Control large squares
+Include guide on which colors are available (internal & external circles!)
+Add path selection for storing file
