@@ -13,7 +13,7 @@ class Questions:
 
     def __init__(self):
         self.list_of_q = []
-        with open('./../data/questions_v1.csv') as f:
+        with open('./../data/questions_v13.csv') as f:
             reader = csv.reader(f, delimiter='\t')
             for line in reader:
                 new_q = Question(line[0],line[1],line[2])
