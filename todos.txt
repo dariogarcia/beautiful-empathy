@@ -1,4 +1,5 @@
-Parse questions_v3.csv
+3 questions instead of 5
+allow stop on any user (currently only last user)
 Turn color selection from list to radio button
 Reset last click only
 Control large squares

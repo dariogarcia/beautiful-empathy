@@ -10,9 +10,5 @@ Contains syntax incompatible with Python 2.7.17.
 
 Current license is Attribution-NonCommercial 3.0 Unported. See LICENSE.md for details.
 
-# About
-A game by Dario. You can contact me at <dariogarcia@gmail.com>.
-
-## Question generation
-A subset was manually extracted from an online source, and resulted in the questions available in this version ("questions_v0.tsv").
-A working language model is ready to produce candidates (question_generation/main.py).
+# Contact
+dariogarcia over at gmail.com
