@@ -1,6 +1,8 @@
 # Beautiful Empathy
 This is a board game about guessing others mind and painting.
 
+![sario210222](https://github.com/user-attachments/assets/5ab600c5-26ff-4638-93be-b4affafff586)
+
 Take a quick look at the rules in "rules/main.pdf". Its brief and full of pictures.
 
 To run the game, run "python src/BeautifulEmpathyApp.py".
